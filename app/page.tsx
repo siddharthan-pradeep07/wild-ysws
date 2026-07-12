@@ -22,7 +22,7 @@ export default function HomePage()
         <input
           type="email"
           required
-          placeholder="you@example.com"
+          placeholder="rgre"
           className="input-email"
         />
         <button
