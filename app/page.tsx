@@ -23,13 +23,13 @@ export default function HomePage()
           type="email"
           required
           placeholder="you@example.com"
-          className="flex-1 px-4 py-3 border border-[#132A36]/20 text-[#132A36] placeholder:text-[#132A36]/40 focus:outline-none focus:ring-2 focus:ring-[#132A36]/30"
+          className="input-email"
         />
         <button
           type="submit"
-          className="px-6 py-3 bg-[#132A36] text-white font-medium"
+          className="btn-primary"
         >
-          Notify me
+          get started
         </button>
       </form>
     </main>
