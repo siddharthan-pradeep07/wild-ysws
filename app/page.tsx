@@ -1,12 +1,13 @@
 import Image from "next/image";
+import WavyDivider from "@/components/WavyDivider";
 
 export default function HomePage() 
 {
   return (
-    <main className="min-h-screen bg-[#a0ca96] flex flex-col items-center justify-center px-6 text-center">
-      <div className="relative w-72 h-72 md:w-[420px] md:h-[420px] mb-8">
+    <main className="min-h-screen bg-[#fff] flex flex-col items-center justify-start pt-0 px-10 text-center">
+      <div className="relative w-156 h-156 md:w-[920px] md:h-[520px] mb-2">
         <Image
-          src="/logo_main_image.png"
+          src="/logo_main_image-remove.png"
           alt="Logo"
           fill
           className="object-contain"
@@ -18,7 +19,7 @@ export default function HomePage()
         Ship something wild. 
       </h1>
 
-      <form className="flex flex-col sm:flex-row gap-1 w-full max-w-sm">
+      <form className="flex flex-col sm:flex-row gap-1 w-full max-w-sm mb-10">
         <input
           type="email"
           required
@@ -32,6 +33,7 @@ export default function HomePage()
           get started
         </button>
       </form>
+      <WavyDivider color="#132A36"/>
     </main>
   );
 }
