@@ -35,6 +35,7 @@ body {
   /* border-radius: 0.75rem; */
   /* border: none; */
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .btn-primary:hover
