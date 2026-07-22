@@ -68,3 +68,11 @@ body {
 {
   border-color: #493e2a;
 }
+.info-box
+{
+  max-width: 650px;
+  width: 100px;
+  padding: 2rem;
+  background-color: #f0f0f0;
+  border-radius: 0.5rem;
+}

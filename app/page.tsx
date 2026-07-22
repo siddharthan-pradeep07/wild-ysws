@@ -4,7 +4,7 @@ import WavyDivider from "@/components/WavyDivider";
 export default function HomePage() 
 {
   return (
-    <main className="min-h-screen bg-[#fff] flex flex-col items-center justify-start pt-0 text-center">
+    <main className="min-h-screen bg-[#cad2c5] flex flex-col items-center justify-start pt-0 text-center">
       <div className="w-full flex flex-col items-center px-10">
         <div className="relative w-156 h-156 md:w-[920px] md:h-[520px] mb-2">
           <Image
@@ -37,6 +37,17 @@ export default function HomePage()
       </div>
 
       <WavyDivider color="#132A36"/>
+      <WavyDivider color="#132A36"/>
+      <section className="w-full flex flex-col items-center px-10 py-16">
+        <div className='info-box'>
+          <h2 className="text-2xl md:text-4xl font-bold mb-4 text-[#132A36]">
+            Ship projects that take inspiration from nature, win exciting prizes!
+          </h2>
+          <p className="text-lg md:text-xl text-[#132A36]">
+            hhh jiefnwinweifnweifnwehifnihwenfweifhnihnwefiwehfnwiehfn      
+          </p>
+        </div>
+      </section>
     </main>
   );
 }
