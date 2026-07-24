@@ -28,11 +28,11 @@ body {
 .btn-primary
 {
   padding: 0.75rem 1.5rem;
-  background-color: #7e6e51;
-  border: 3.5px inset #493e2a;
+  background-color: #bc4749;
+  /* border: 4px solid #020202; */
   color: #ffffff;
-  font-weight: 500;
-  /* border-radius: 0.75rem; */
+  font-weight: 700;
+  border-radius: 2rem;
   /* border: none; */
   cursor: pointer;
   white-space: nowrap;
@@ -40,8 +40,10 @@ body {
 
 .btn-primary:hover
 {
-  background-color: #94825f;
-  border: 3.5px inset #493e2a;
+  background-color: #d66365;
+  border-radius: 0.25rem;
+
+  /* border: 4px solid #000000; */
 }
 
 .input-email
@@ -71,8 +73,9 @@ body {
 .info-box
 {
   max-width: 650px;
-  width: 100px;
+  width: 900px;
   padding: 2rem;
-  background-color: #f0f0f0;
-  border-radius: 0.5rem;
+  background-color: #98c37f;
+  border-radius: 0.6rem;
+  border: 4px solid #000;
 }

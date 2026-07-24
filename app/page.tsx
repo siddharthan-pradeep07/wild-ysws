@@ -16,8 +16,8 @@ export default function HomePage()
           />
         </div>
 
-        <h1 className="text-3xl md:text-5xl italic text-[#132A36] mb-4">
-          Ship something wild. 
+        <h1 className="text-2xl md:text-4xl italic text-[#132A36] mb-4">
+          make projects that combine two random things, get intersting prizes
         </h1>
 
         <form className="flex flex-col sm:flex-row gap-1 w-full max-w-sm mb-10 mx-auto justify-center">
@@ -36,18 +36,27 @@ export default function HomePage()
         </form>
       </div>
 
-      <WavyDivider color="#132A36"/>
-      <WavyDivider color="#132A36"/>
+      <WavyDivider/>
       <section className="w-full flex flex-col items-center px-10 py-16">
         <div className='info-box'>
           <h2 className="text-2xl md:text-4xl font-bold mb-4 text-[#132A36]">
-            Ship projects that take inspiration from nature, win exciting prizes!
+            What should I do?
           </h2>
+          <p className="text-rg md:text-xl text-[#132A36] mb-3">
+            - Come up with a project idea that combines two random things, ask in #wild in slack for suggestions      
+          </p>
+          <p className="text-lg md:text-xl text-[#132A36] mb-3">
+            - Start making the project, view project guide here if you're new
+          </p>
+          <p className="text-lg md:text-xl text-[#132A36] mb-3">
+            - Submit your project on or before 1st of december      
+          </p>
           <p className="text-lg md:text-xl text-[#132A36]">
-            hhh jiefnwinweifnweifnwehifnihwenfweifhnihnwefiwehfnwiehfn      
+            - win cool prizes! :yay:      
           </p>
         </div>
       </section>
+      <WavyDivider/>
     </main>
   );
 }
