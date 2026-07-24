@@ -57,6 +57,40 @@ export default function HomePage()
         </div>
       </section>
       <WavyDivider/>
+      <section className="w-full flex flex-col items-center px-10 py-16">
+        <div className="examples-box">
+          <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0">
+            <Image
+              src="/wild-ysws-raw-images/project-1-1.jpg"
+              alt="First project first thing"
+              fill
+              className="object-contain"
+            />
+          </div>   
+            {/* image seperator icon */}
+          <span className= "text-4xl md:text-6xl font-bold text-[#132A36]">+</span>
+
+          <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0">
+            <Image
+              src="/wild-ysws-raw-images/project-1-2.png"
+              alt="First project second thing"
+              fill
+              className="object-contain"
+            />
+          </div>
+
+          <span className= "text-4xl md:text-6xl font-bold text-[#132A36]">=</span>
+
+          <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0">
+            <Image
+              src="/wild-ysws-raw-images/project-1-3.jpg"
+              alt="First project last thing"
+              fill
+              className="object-contain"
+            />
+          </div> 
+        </div>  
+      </section>
     </main>
   );
 }

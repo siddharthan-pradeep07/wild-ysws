@@ -1,4 +1,4 @@
-export default function WavyDivider({ src = "/squiggle.webp", color = "#493e2a" }: { src?: string; color?: string }) {
+export default function WavyDivider({ src = "/squiggle.webp", color = "#64543d" }: { src?: string; color?: string }) {
   return (
     <div
       className="w-full h-8 md:h-10"
