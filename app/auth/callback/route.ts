@@ -43,9 +43,16 @@ export async function GET(request: NextRequest)
   const user = await userRes.json();
   // user.email, user.name, user.sub
 
-  const response = NextResponse.redirect(new URL("/", request.url));
+  const response = NextResponse.redirect(new URL("/welcome", request.url));
 
-  response.cookies.set("session_email", user.email ?? "", 
+  response.cookies.set("session_user", JSON.stringify ({
+    email: user.email,
+    name: user.name,
+    slack_id: user.slack_id,
+    verification_status: user.verification_status,
+    ysws_eligible: user.ysws_eligible,
+    sub: user.sub
+  }),
   {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 30,
