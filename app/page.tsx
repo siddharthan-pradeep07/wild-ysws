@@ -4,14 +4,14 @@ import WavyDivider from "@/components/WavyDivider";
 export default function HomePage() 
 {
   return (
-    <main className="min-h-screen bg-[#b8c9a8] flex flex-col items-center justify-start pt-0 text-center">
+    <main className="min-h-screen bg-[#a3b18a] flex flex-col items-center justify-start pt-0 text-center">
       <div className="w-full flex flex-col items-center px-10">
         <div className="relative w-156 h-156 md:w-[920px] md:h-[520px] mb-2">
           <Image
             src="/logo_main_image-remove.png"
             alt="Logo"
             fill
-            className="object-contain"
+            // className="object-contain"
             priority
           />
         </div>
@@ -70,7 +70,7 @@ export default function HomePage()
               className="object-contain"
             />
           </div>
-          <p className="image-names">~a dustbin</p>
+          <p className="image-names">~ a dustbin</p>
           </div>   
             {/* image seperator icon */}
           <span className= "text-4xl md:text-6xl font-bold text-[#132A36]">+</span>
@@ -84,7 +84,7 @@ export default function HomePage()
               className="object-contain"
             />
           </div>
-          <p className="image-names">~a chatbot</p>
+          <p className="image-names">~ a chatbot</p>
           </div>
 
           <span className= "text-4xl md:text-6xl font-bold text-[#132A36]">=</span>
@@ -98,7 +98,7 @@ export default function HomePage()
               className="object-contain"
             />
           </div>
-          <p className="image-names">~a talking dustbin</p>
+          <p className="image-names">~ a talking dustbin</p>
           </div> 
         </div>
         </div>  
