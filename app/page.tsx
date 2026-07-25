@@ -4,7 +4,7 @@ import WavyDivider from "@/components/WavyDivider";
 export default function HomePage() 
 {
   return (
-    <main className="min-h-screen bg-[#cad2c5] flex flex-col items-center justify-start pt-0 text-center">
+    <main className="min-h-screen bg-[#b8c9a8] flex flex-col items-center justify-start pt-0 text-center">
       <div className="w-full flex flex-col items-center px-10">
         <div className="relative w-156 h-156 md:w-[920px] md:h-[520px] mb-2">
           <Image
@@ -58,7 +58,10 @@ export default function HomePage()
       </section>
       <WavyDivider/>
       <section className="w-full flex flex-col items-center px-10 py-16">
+        <div className="examples-top">
+          <h2 className="examples-title">Example projects</h2>
         <div className="examples-box">
+          <div className ="flex flex-col items center shrink-0">
           <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0">
             <Image
               src="/wild-ysws-raw-images/project-1-1.jpg"
@@ -66,10 +69,13 @@ export default function HomePage()
               fill
               className="object-contain"
             />
+          </div>
+          <p className="image-names">~a dustbin</p>
           </div>   
             {/* image seperator icon */}
           <span className= "text-4xl md:text-6xl font-bold text-[#132A36]">+</span>
 
+          <div className ="flex flex-col items center shrink-0">
           <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0">
             <Image
               src="/wild-ysws-raw-images/project-1-2.png"
@@ -78,9 +84,12 @@ export default function HomePage()
               className="object-contain"
             />
           </div>
+          <p className="image-names">~a chatbot</p>
+          </div>
 
           <span className= "text-4xl md:text-6xl font-bold text-[#132A36]">=</span>
 
+          <div className ="flex flex-col items center shrink-0">
           <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0">
             <Image
               src="/wild-ysws-raw-images/project-1-3.jpg"
@@ -88,9 +97,13 @@ export default function HomePage()
               fill
               className="object-contain"
             />
+          </div>
+          <p className="image-names">~a talking dustbin</p>
           </div> 
+        </div>
         </div>  
       </section>
+      <WavyDivider/>
     </main>
   );
 }

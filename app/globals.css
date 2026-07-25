@@ -84,16 +84,47 @@ body {
 
 .examples-box
 {
-  max-width: 650px;
+  max-width: 950px;
   width: 900px;
   padding: 3rem 2rem;
-  background-color: #98c37f;
+  background-color: #7c9473;
   border-radius: 1rem;
-  border: 4px solid #000;
+  border: 4px solid #4a6b4f;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+}
+
+.object-contain
+{
+  border: 3px solid #4a6b4f;
+  border-radius: 1rem;
+}
+
+.image-names
+{
+  margin-top:0.5rem;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #4a5048;
+}
+
+.image-caption
+{
+  margin-top: 0.5rem;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #4e3b26;
+}
+
+.examples-title
+{
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #132A36;
+  margin-bottom: 0.75rem;
+  text-align: left;
 }
