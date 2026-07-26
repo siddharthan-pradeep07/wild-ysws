@@ -4,6 +4,29 @@ import { useState } from "react";
 import Image from "next/image";
 import WavyDivider from "@/components/WavyDivider";
 
+const faq = [
+  {
+    question: "What's Hack CLub?",
+    answer: "Hack Club is a 501(c)(3) nonprofit (EIN: 81-2908499) that helps high school students learn to code and build projects. We’re the largest teen-led coding community, with over 60,000 students building projects with their friends in Hack Club each year."
+  },
+  {
+    question: "Who can participate?",
+    answer: "Anyone from the ages of 13-18 are eligible"
+  },
+  {
+    question: "What counts as a valid submission?",
+    answer: "A working project that combines two unrelated things. The weirder the combo, the better it is!"
+  },
+  {
+    question: "Event timeline",
+    answer: "Wild starts on xx/xx and ends on xxxx"
+  },
+  {
+    question: "What prizes do I get?",
+    answer: "You'll get prizes in combos based on your time spent on projects!"
+  },
+]
+
 const examplePages = [
  [
   { src: "/wild-ysws-raw-images/project-1-1.jpg", alt: "project 1-1", caption: "a dustbin"},
@@ -29,6 +52,7 @@ const examplePages = [
 export default function HomePage() 
 {
   const [currentPage, setCurrentPage]= useState(0);
+  const [openFaq, setOpenFaq] = useState < number | null > (null);
   return (
     <main className="min-h-screen bg-[#a3b18a] flex flex-col items-center justify-start pt-0 text-center">
       <div className="w-full flex flex-col items-center px-10">
@@ -123,6 +147,28 @@ export default function HomePage()
         </div>
         </div>
         </div>  
+      </section>
+      <WavyDivider/>
+      <section className="w-full flex flex-col itmes-center px-10 py-16">
+        <div className="examples-top">
+          <h2 className="examples-title">Frequently asked questions</h2>
+          <div className="faq-box">
+            {faq.map((faq, i) =>
+            (
+              <div key={i} className="faq-item">
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="faq-question">
+                    <span>{faq.question}</span>
+                    <span className={`faq-icon ${openFaq === i ? "faq-icon-open" : ""}`}>+</span>
+                  </button>
+                  <div className={`faq-answer ${openFaq === i ? "faq-answer-open" : ""}`}>
+                    <p className = "faq-answer-text">{faq.answer}</p>
+                  </div>  
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
       <WavyDivider/>
     </main>

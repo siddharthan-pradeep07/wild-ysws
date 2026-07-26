@@ -19,7 +19,7 @@ export default async function WelcomePage()
         {label: "slack id", value: user.slack_id},
         {label: "verification status", value: user.verification_status},
         {label: "YSWS eligibility", value: String(user.ysws_eligible)},
-        {label: "user id", value: user.sub},
+        // {label: "user id", value: user.sub},
     ];
 
     return (
