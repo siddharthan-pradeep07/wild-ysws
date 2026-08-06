@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";  
+import { usePathname } from "next/navigation";
 
 const navItems =
 [
@@ -11,14 +11,17 @@ const navItems =
     {label: "profile", href: "/profile"},
 ];
 
-export default  function Sidebar()
+export default  function Sidebar({ isAdmin = false }: { isAdmin?: boolean })
 {
     const pathname = usePathname();
+    const items = isAdmin
+        ? [...navItems, {label: "admin", href: "/admin"}]
+        : navItems;
 
     return (
         <aside className="sidebar">
             <nav className="sidebar-nav">
-                {navItems.map((item) => (
+                {items.map((item) => (
                     <Link
                         key={item.href}
                         href={item.href}
