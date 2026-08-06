@@ -23,7 +23,7 @@ export default async function WelcomePage()
     ];
 
     return (
-    <main className="min-h-screen bg-[#a3b18a] flex flex-col items-center justify-center px-10 py-16 text-center">
+    // <main className="min-h-screen bg-[#a3b18a] flex flex-col items-center justify-center px-10 py-16 text-center">
       <div className="info-box text-left">
         <h1 className="text-2xl md:text-4xl font-bold mb-6 text-[#132A36]">
           Welcome, {user.name ?? "there"}!
@@ -37,6 +37,6 @@ export default async function WelcomePage()
           ))}
         </div>
       </div>
-    </main>
+    // </main>
   );
 }

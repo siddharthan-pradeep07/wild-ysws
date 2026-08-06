@@ -43,7 +43,7 @@ export async function GET(request: NextRequest)
   const user = await userRes.json();
   // user.email, user.name, user.sub
 
-  const response = NextResponse.redirect(new URL("/welcome", request.url));
+  const response = NextResponse.redirect(new URL("/home", request.url));
 
   response.cookies.set("session_user", JSON.stringify ({
     email: user.email,

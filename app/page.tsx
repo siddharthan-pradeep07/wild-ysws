@@ -149,7 +149,7 @@ export default function HomePage()
         </div>  
       </section>
       <WavyDivider/>
-      <section className="w-full flex flex-col itmes-center px-10 py-16">
+      <section className="w-full flex flex-col items-center px-10 py-16">
         <div className="examples-top">
           <h2 className="examples-title">Frequently asked questions</h2>
           <div className="faq-box">
