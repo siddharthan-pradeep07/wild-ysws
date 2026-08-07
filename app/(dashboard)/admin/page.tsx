@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { isAdminUser } from "@/lib/admin";
 import { listShopItems } from "@/lib/shop";
+import { listUsers } from "@/lib/users";
 import { createShopItemAction } from "./actions";
 import AdminTabs from "./AdminTabs";
 import ShopItemRow from "./ShopItemRow";
@@ -16,6 +17,7 @@ export default async function AdminPage()
     }
 
     const items = await listShopItems();
+    const users = await listUsers();
 
     const shopTabContent = (
         <div className="flex flex-col gap-8">
@@ -90,6 +92,33 @@ export default async function AdminPage()
         </div>
     );
 
+    const usersTabContent = (
+        <div className="admin-panel-section text-left">
+            <h2 className="text-xl md:text-2xl font-bold mb-6 text-strong">
+                Users ({users.length})
+            </h2>
+
+            {users.length === 0 ? (
+                <p className="text-lg text-strong">No one has logged in yet.</p>
+            ) : (
+                <div className="users-table">
+                    <div className="users-table-row users-table-header">
+                        <span>Name</span>
+                        <span>Email</span>
+                        <span>Slack ID</span>
+                    </div>
+                    {users.map((appUser) => (
+                        <div key={appUser.id} className="users-table-row">
+                            <span>{appUser.name || "—"}</span>
+                            <span>{appUser.email || "—"}</span>
+                            <span>{appUser.slackId || "—"}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+
     return (
         <div className="flex flex-col gap-8">
             <h1 className="text-2xl md:text-4xl font-bold text-strong">
@@ -108,6 +137,11 @@ export default async function AdminPage()
                         key: "placeholder-2",
                         label: "leaderboard",
                         content: placeholderContent,
+                    },
+                    {
+                        key: "users",
+                        label: "Users",
+                        content: usersTabContent,
                     },
                 ]}
             />

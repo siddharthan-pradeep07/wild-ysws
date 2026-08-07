@@ -412,7 +412,7 @@ body {
 .shop-grid
 {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 1.5rem;
   width: 100%;
 }
@@ -484,4 +484,31 @@ body {
   color: #132a36;
   padding: 0.25rem 0.5rem;
   text-align: left;
+}
+
+.users-table
+{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.users-table-row
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #ffffff49;
+  border-radius: 0.75rem;
+  border: 3px solid #4a6b4f;
+  color: #132a36;
+}
+
+.users-table-header
+{
+  font-weight: 900;
+  background-color: #4a6b4f;
+  color: #ffffff;
+  border-color: #4a6b4f;
 }

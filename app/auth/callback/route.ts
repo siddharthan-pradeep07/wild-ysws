@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { recordUserLogin } from "@/lib/users";
 
 export async function GET(request: NextRequest) 
 {
@@ -42,6 +43,21 @@ export async function GET(request: NextRequest)
 
   const user = await userRes.json();
   // user.email, user.name, user.sub
+
+  // Best-effort — logging a login must never block the login itself, even
+  // if Airtable or the Users table isn't set up yet.
+  try
+  {
+    await recordUserLogin({
+      name: user.name,
+      email: user.email,
+      slackId: user.slack_id,
+    });
+  }
+  catch (err)
+  {
+    console.error("Failed to record user login:", err);
+  }
 
   const response = NextResponse.redirect(new URL("/home", request.url));
 

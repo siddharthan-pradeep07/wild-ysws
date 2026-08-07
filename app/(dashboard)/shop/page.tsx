@@ -5,10 +5,12 @@ export default async function ShopPage()
     const items = await listShopItems();
 
     return (
-        <div className="info-box text-left">
-            <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
-                Shop Page
-            </h1>
+        <div className="text-left">
+            <div className="info-box">
+                <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
+                    Shop Page
+                </h1>
+            </div>
 
             {items.length === 0 ? (
                 <p className="text-lg text-strong">

@@ -8,7 +8,6 @@ function getConfig()
 {
     const token = process.env.AIRTABLE_TOKEN;
     const baseId = process.env.AIRTABLE_BASE_ID;
-    const table = process.env.AIRTABLE_TABLE_NAME ?? "Shop Items";
 
     if (!token || !baseId)
     {
@@ -17,12 +16,12 @@ function getConfig()
         );
     }
 
-    return { token, baseId, table };
+    return { token, baseId };
 }
 
-function recordUrl(id?: string)
+function recordUrl(table: string, id?: string)
 {
-    const { baseId, table } = getConfig();
+    const { baseId } = getConfig();
     const base = `${AIRTABLE_API_URL}/${baseId}/${encodeURIComponent(table)}`;
     return id ? `${base}/${id}` : base;
 }
@@ -59,16 +58,24 @@ export type AirtableRecord<T> =
     fields: T;
 };
 
-export async function listRecords<T>(): Promise<AirtableRecord<T>[]>
+export async function listRecords<T>(
+    table: string,
+    params?: Record<string, string>
+): Promise<AirtableRecord<T>[]>
 {
     const records: AirtableRecord<T>[] = [];
     let offset: string | undefined;
 
     do
     {
-        const url = offset
-            ? `${recordUrl()}?offset=${encodeURIComponent(offset)}`
-            : recordUrl();
+        const query = new URLSearchParams(params ?? {});
+        if (offset)
+        {
+            query.set("offset", offset);
+        }
+
+        const qs = query.toString();
+        const url = qs ? `${recordUrl(table)}?${qs}` : recordUrl(table);
 
         const data = await airtableFetch(url);
         records.push(...data.records);
@@ -80,27 +87,29 @@ export async function listRecords<T>(): Promise<AirtableRecord<T>[]>
 }
 
 export async function createRecord<T extends object>(
+    table: string,
     fields: T
 ): Promise<AirtableRecord<T>>
 {
-    return airtableFetch(recordUrl(), {
+    return airtableFetch(recordUrl(table), {
         method: "POST",
         body: JSON.stringify({ fields }),
     });
 }
 
 export async function updateRecord<T extends object>(
+    table: string,
     id: string,
     fields: Partial<T>
 ): Promise<AirtableRecord<T>>
 {
-    return airtableFetch(recordUrl(id), {
+    return airtableFetch(recordUrl(table, id), {
         method: "PATCH",
         body: JSON.stringify({ fields }),
     });
 }
 
-export async function deleteRecord(id: string): Promise<void>
+export async function deleteRecord(table: string, id: string): Promise<void>
 {
-    await airtableFetch(recordUrl(id), { method: "DELETE" });
+    await airtableFetch(recordUrl(table, id), { method: "DELETE" });
 }

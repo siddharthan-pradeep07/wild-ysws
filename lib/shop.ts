@@ -6,6 +6,8 @@ import {
     updateRecord,
 } from "@/lib/airtable";
 
+const TABLE = process.env.AIRTABLE_TABLE_NAME ?? "Shop Items";
+
 export type ShopItem =
 {
     id: string;
@@ -17,7 +19,7 @@ export type ShopItem =
     createdAt: string;
 };
 
-// Field names must match the columns in the Airtable "Shop Items" table
+// Field names must match the columns in the Airtable shop items table
 // (table name configurable via AIRTABLE_TABLE_NAME).
 type ShopItemFields =
 {
@@ -63,7 +65,7 @@ function inputToFields(data: ShopItemInput): ShopItemFields
 
 export async function listShopItems(): Promise<ShopItem[]>
 {
-    const records = await listRecords<ShopItemFields>();
+    const records = await listRecords<ShopItemFields>(TABLE);
 
     return records
         .map(recordToItem)
@@ -72,7 +74,7 @@ export async function listShopItems(): Promise<ShopItem[]>
 
 export async function createShopItem(data: ShopItemInput): Promise<ShopItem>
 {
-    const record = await createRecord<ShopItemFields>(inputToFields(data));
+    const record = await createRecord<ShopItemFields>(TABLE, inputToFields(data));
     return recordToItem(record);
 }
 
@@ -81,11 +83,11 @@ export async function updateShopItem(
     data: ShopItemInput
 ): Promise<ShopItem>
 {
-    const record = await updateRecord<ShopItemFields>(id, inputToFields(data));
+    const record = await updateRecord<ShopItemFields>(TABLE, id, inputToFields(data));
     return recordToItem(record);
 }
 
 export async function deleteShopItem(id: string): Promise<void>
 {
-    await deleteRecord(id);
+    await deleteRecord(TABLE, id);
 }
