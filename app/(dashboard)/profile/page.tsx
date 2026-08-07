@@ -1,3 +1,4 @@
+import UserAvatar from "@/components/UserAvatar";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 
@@ -19,15 +20,17 @@ export default async function WelcomePage()
         {label: "slack id", value: user.slack_id},
         {label: "verification status", value: user.verification_status},
         {label: "YSWS eligibility", value: String(user.ysws_eligible)},
-        // {label: "user id", value: user.sub},
+        {label: "user id", value: user.sub},
     ];
 
     return (
     // <main className="min-h-screen bg-[#a3b18a] flex flex-col items-center justify-center px-10 py-16 text-center">
       <div className="info-box text-left">
+        {/* <UserAvatar/> */}
         <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
           Welcome, {user.name ?? "there"}!
         </h1>
+        
 
         <div className="flex flex-col gap-2">
           {fields.map((field) => (
