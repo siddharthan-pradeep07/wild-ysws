@@ -23,6 +23,7 @@ function parseItemInput(formData: FormData)
     const name = String(formData.get("name") ?? "").trim();
     const description = String(formData.get("description") ?? "").trim();
     const imageUrl = String(formData.get("imageUrl") ?? "").trim();
+    const fulfillment = String(formData.get("fulfillment") ?? "").trim();
     const price = Number(formData.get("price"));
 
     if (!name)
@@ -34,7 +35,7 @@ function parseItemInput(formData: FormData)
         throw new Error("Price must be a positive number");
     }
 
-    return { name, description, imageUrl, price };
+    return { name, description, imageUrl, fulfillment, price };
 }
 
 function parseId(formData: FormData): string

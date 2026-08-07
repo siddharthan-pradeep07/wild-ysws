@@ -6,12 +6,12 @@ export default async function ShopPage()
 
     return (
         <div className="info-box text-left">
-            <h1 className="text-2xl md:text-4xl font-bold mb-6 text-[#132A36]">
+            <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
                 Shop Page
             </h1>
 
             {items.length === 0 ? (
-                <p className="text-lg text-[#132A36]">
+                <p className="text-lg text-strong">
                     No items in the shop yet — check back soon!
                 </p>
             ) : (
@@ -26,17 +26,22 @@ export default async function ShopPage()
                                     className="shop-card-image"
                                 />
                             )}
-                            <h2 className="text-lg font-bold text-[#132A36]">
+                            <h2 className="text-lg font-bold text-strong">
                                 {item.name}
                             </h2>
                             {item.description && (
-                                <p className="text-sm text-[#132A36]">
+                                <p className="text-sm text-strong">
                                     {item.description}
                                 </p>
                             )}
                             <span className="shop-card-price">
-                                ${item.price.toFixed(2)}
+                                {item.price} barks
                             </span>
+                            {item.fulfillment && (
+                                <p className="shop-card-fulfillment">
+                                    {item.fulfillment}
+                                </p>
+                            )}
                         </div>
                     ))}
                 </div>

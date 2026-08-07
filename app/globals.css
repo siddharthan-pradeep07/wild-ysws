@@ -238,6 +238,11 @@ body {
   background-color: #a3b18a;
 }
 
+.text-strong
+{
+  color: #132a36;
+}
+
 .sidebar
 {
   width: 250px;
@@ -272,7 +277,7 @@ body {
   text-decoration: underline;
   text-decoration-style: wavy;
   text-decoration-color: #1d331e;
-  text-underline-offset: 6px; 
+  text-underline-offset: 6px;
   text-decoration-thickness: 3px;
 }
 
@@ -291,35 +296,99 @@ body {
   gap: 2rem;
 }
 
-.admin-item-row
+/* Full-width rectangle stretching from the sidebar edge to the end of the
+   screen, used for the admin panel's add-item form and item list. */
+.admin-panel-section
+{
+  width: 100%;
+  padding: 2rem;
+  background-color: #ffffff49;
+  border-radius: 1rem;
+  border: 4px solid #000;
+}
+
+.admin-tabs
 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
   gap: 0.75rem;
+}
+
+.admin-tab
+{
+  padding: 0.6rem 1.25rem;
+  border-radius: 1rem;
+  border: 3px solid #4a6b4f;
+  background-color: transparent;
+  color: #132a36;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.admin-tab-active
+{
+  background-color: #4a6b4f;
+  color: #ffffff;
+}
+
+/* Each shop item's own rectangle inside the "Current Items" panel. */
+.shop-item-card
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
   padding: 1rem;
   background-color: #ffffff49;
   border-radius: 1rem;
   border: 3px solid #4a6b4f;
 }
 
-.admin-item-form
+.shop-item-thumb
+{
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  border: 3px solid #4a6b4f;
+  flex-shrink: 0;
+}
+
+.shop-item-thumb-empty
+{
+  background-color: #4a6b4f;
+  opacity: 0.35;
+}
+
+.shop-item-name
+{
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #132a36;
+}
+
+.shop-item-actions
 {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
-.admin-item-form .input-email
+.shop-item-edit-form
 {
-  flex: 1;
-  min-width: 140px;
-  font-size: 1rem;
-  padding: 0.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem;
+  background-color: #ffffff49;
+  border-radius: 1rem;
+  border: 3px solid #4a6b4f;
 }
 
 .shop-grid
@@ -354,6 +423,14 @@ body {
 .shop-card-price
 {
   font-weight: 900;
-  color: #132A36;
+  color: #132a36;
   font-size: 1.25rem;
+}
+
+.shop-card-fulfillment
+{
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #132a36;
+  opacity: 0.8;
 }

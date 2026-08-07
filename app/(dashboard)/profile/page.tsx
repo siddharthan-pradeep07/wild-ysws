@@ -25,13 +25,13 @@ export default async function WelcomePage()
     return (
     // <main className="min-h-screen bg-[#a3b18a] flex flex-col items-center justify-center px-10 py-16 text-center">
       <div className="info-box text-left">
-        <h1 className="text-2xl md:text-4xl font-bold mb-6 text-[#132A36]">
+        <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
           Welcome, {user.name ?? "there"}!
         </h1>
 
         <div className="flex flex-col gap-2">
           {fields.map((field) => (
-            <p key={field.label} className="text-lg text-[#132A36]">
+            <p key={field.label} className="text-lg text-strong">
               <span className="font-bold">{field.label}:</span> {field.value ?? "—"}
             </p>
           ))}

@@ -13,6 +13,7 @@ export type ShopItem =
     description: string;
     price: number;
     imageUrl: string;
+    fulfillment: string;
     createdAt: string;
 };
 
@@ -24,6 +25,7 @@ type ShopItemFields =
     Description?: string;
     Price?: number;
     "Image URL"?: string;
+    fulfill?: string;
 };
 
 function recordToItem(record: AirtableRecord<ShopItemFields>): ShopItem
@@ -34,6 +36,7 @@ function recordToItem(record: AirtableRecord<ShopItemFields>): ShopItem
         description: record.fields.Description ?? "",
         price: record.fields.Price ?? 0,
         imageUrl: record.fields["Image URL"] ?? "",
+        fulfillment: record.fields.fulfill ?? "",
         createdAt: record.createdTime,
     };
 }
@@ -44,6 +47,7 @@ export type ShopItemInput =
     description: string;
     price: number;
     imageUrl: string;
+    fulfillment: string;
 };
 
 function inputToFields(data: ShopItemInput): ShopItemFields
@@ -53,6 +57,7 @@ function inputToFields(data: ShopItemInput): ShopItemFields
         Description: data.description,
         Price: data.price,
         "Image URL": data.imageUrl,
+        fulfill: data.fulfillment,
     };
 }
 

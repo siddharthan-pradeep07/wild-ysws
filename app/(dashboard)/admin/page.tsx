@@ -2,7 +2,9 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { isAdminUser } from "@/lib/admin";
 import { listShopItems } from "@/lib/shop";
-import { createShopItemAction, deleteShopItemAction, updateShopItemAction } from "./actions";
+import { createShopItemAction } from "./actions";
+import AdminTabs from "./AdminTabs";
+import ShopItemRow from "./ShopItemRow";
 
 export default async function AdminPage()
 {
@@ -15,21 +17,18 @@ export default async function AdminPage()
 
     const items = await listShopItems();
 
-    return (
+    const shopTabContent = (
         <div className="flex flex-col gap-8">
-            <div className="info-box text-left">
-                <h1 className="text-2xl md:text-4xl font-bold mb-6 text-[#132A36]">
-                    Admin — Shop Items
-                </h1>
-                <p className="text-lg text-[#132A36] mb-6">
-                    Add a new item to the shop.
-                </p>
+            <div className="admin-panel-section text-left">
+                <h2 className="text-xl md:text-2xl font-bold mb-6 text-strong">
+                    Add new shop item
+                </h2>
 
                 <form action={createShopItemAction} className="flex flex-col gap-3">
                     <div className="flex flex-col md:flex-row gap-3">
                         <input
                             name="name"
-                            placeholder="Item name"
+                            placeholder="Name"
                             required
                             className="input-email"
                         />
@@ -37,15 +36,15 @@ export default async function AdminPage()
                             name="price"
                             type="number"
                             min="0"
-                            step="0.01"
-                            placeholder="Price (USD)"
+                            step="1"
+                            placeholder="Price (barks)"
                             required
                             className="input-email"
                         />
                     </div>
                     <input
                         name="imageUrl"
-                        placeholder="Image URL (optional)"
+                        placeholder="Image URL"
                         className="input-email"
                     />
                     <textarea
@@ -54,72 +53,64 @@ export default async function AdminPage()
                         rows={3}
                         className="input-email"
                     />
+                    <input
+                        name="fulfillment"
+                        placeholder="Fulfillment (e.g. Ships in 2 weeks, Instant digital code)"
+                        className="input-email"
+                    />
                     <button type="submit" className="btn-primary self-start">
                         Add Item
                     </button>
                 </form>
             </div>
 
-            <div className="info-box text-left">
-                <h2 className="text-xl md:text-2xl font-bold mb-4 text-[#132A36]">
+            <div className="admin-panel-section text-left">
+                <h2 className="text-xl md:text-2xl font-bold mb-6 text-strong">
                     Current Items ({items.length})
                 </h2>
 
                 {items.length === 0 ? (
-                    <p className="text-lg text-[#132A36]">No shop items yet.</p>
+                    <p className="text-lg text-strong">No shop items yet.</p>
                 ) : (
                     <div className="flex flex-col gap-4">
                         {items.map((item) => (
-                            <div key={item.id} className="admin-item-row">
-                                <form
-                                    action={updateShopItemAction}
-                                    className="admin-item-form"
-                                >
-                                    <input type="hidden" name="id" value={item.id} />
-                                    <input
-                                        name="name"
-                                        defaultValue={item.name}
-                                        placeholder="Item name"
-                                        required
-                                        className="input-email"
-                                    />
-                                    <input
-                                        name="price"
-                                        type="number"
-                                        min="0"
-                                        step="0.01"
-                                        defaultValue={item.price.toFixed(2)}
-                                        placeholder="Price (USD)"
-                                        required
-                                        className="input-email"
-                                    />
-                                    <input
-                                        name="imageUrl"
-                                        defaultValue={item.imageUrl}
-                                        placeholder="Image URL"
-                                        className="input-email"
-                                    />
-                                    <input
-                                        name="description"
-                                        defaultValue={item.description}
-                                        placeholder="Description"
-                                        className="input-email"
-                                    />
-                                    <button type="submit" className="btn-primary">
-                                        Save
-                                    </button>
-                                </form>
-                                <form action={deleteShopItemAction}>
-                                    <input type="hidden" name="id" value={item.id} />
-                                    <button type="submit" className="btn-primary">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
+                            <ShopItemRow key={item.id} item={item} />
                         ))}
                     </div>
                 )}
             </div>
+        </div>
+    );
+
+    const placeholderContent = (
+        <div className="admin-panel-section text-left">
+            <p className="text-lg text-strong">
+                12345678910 ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijdfibv !@#$%^&*
+            </p>
+        </div>
+    );
+
+    return (
+        <div className="flex flex-col gap-8">
+            <h1 className="text-2xl md:text-4xl font-bold text-strong">
+                Admin panel
+            </h1>
+
+            <AdminTabs
+                tabs={[
+                    { key: "shop", label: "Shop", content: shopTabContent },
+                    {
+                        key: "placeholder-1",
+                        label: "review",
+                        content: placeholderContent,
+                    },
+                    {
+                        key: "placeholder-2",
+                        label: "leaderboard",
+                        content: placeholderContent,
+                    },
+                ]}
+            />
         </div>
     );
 }
