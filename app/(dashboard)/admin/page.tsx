@@ -87,7 +87,7 @@ export default async function AdminPage()
     const placeholderContent = (
         <div className="admin-panel-section text-left">
             <p className="text-lg text-strong">
-                12345678910 ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijdfibv !@#$%^&*
+                just testing, nothing&apos;s in here
             </p>
         </div>
     );

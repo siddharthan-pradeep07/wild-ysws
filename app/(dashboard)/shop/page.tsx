@@ -6,11 +6,11 @@ export default async function ShopPage()
 
     return (
         <div className="text-left">
-            <div className="info-box">
-                <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
+            {/* <div className="info-box"> */}
+                <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong padding-bottom-0.5">
                     Shop Page
                 </h1>
-            </div>
+            {/* </div> */}
 
             {items.length === 0 ? (
                 <p className="text-lg text-strong">

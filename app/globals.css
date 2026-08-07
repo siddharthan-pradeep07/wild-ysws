@@ -83,7 +83,8 @@ body {
   padding: 2rem;
   background-color: #ffffff49;
   border-radius: 1rem;
-  border: 4px solid #000;
+  border: 4px solid #000000;
+  padding-bottom: 1.5rem;
 }
 
 .examples-box
@@ -264,6 +265,10 @@ body {
 .sidebar
 {
   width: 250px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
   background-color: #4a6b4f;
   padding: 2rem;
   border-right: 6px solid #0d2b28;
