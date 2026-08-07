@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { recordUserLogin } from "@/lib/users";
+import { signSessionCookie } from "@/lib/sessionCookie";
 
 export async function GET(request: NextRequest) 
 {
@@ -61,7 +62,7 @@ export async function GET(request: NextRequest)
 
   const response = NextResponse.redirect(new URL("/home", request.url));
 
-  response.cookies.set("session_user", JSON.stringify ({
+  response.cookies.set("session_user", signSessionCookie({
     email: user.email,
     name: user.name,
     slack_id: user.slack_id,

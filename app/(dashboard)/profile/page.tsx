@@ -1,19 +1,17 @@
 import UserAvatar from "@/components/UserAvatar";
-import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
+import { getSessionUser } from "@/lib/session";
 
 export default async function WelcomePage()
 {
-    const cookieStore = await cookies();
-    const sessionUser = cookieStore.get("session_user")?.value;
+    const user = await getSessionUser();
 
-    if (!sessionUser)
+    if (!user)
     {
         redirect("/");
     }
 
-    const user = JSON.parse(sessionUser);
-    const fields = 
+    const fields =
     [
         {label: "name", value: user.name},
         {label: "email", value: user.email},
