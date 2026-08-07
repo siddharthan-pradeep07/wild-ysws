@@ -18,12 +18,15 @@ export default async function ShopPage()
                 <div className="shop-grid">
                     {items.map((item) => (
                         <div key={item.id} className="shop-card">
-                            <h2 className="text-lg font-bold text-strong">
-                                {item.name}
-                            </h2>
-                            <span className="shop-card-price">
-                                {item.price} barks
-                            </span>
+                            <div className="shop-card-header">
+                                <h2 className="shop-card-name">
+                                    {item.name}
+                                </h2>
+                                <span className="shop-card-price">
+                                    {item.price} barks
+                                </span>
+                            </div>
+
                             {item.imageUrl && (
                                 // eslint-disable-next-line @next/next/no-img-element
                                 <img
@@ -32,9 +35,9 @@ export default async function ShopPage()
                                     className="shop-card-image"
                                 />
                             )}
-                            
+
                             {item.description && (
-                                <p className="text-sm text-strong">
+                                <p className="shop-card-description">
                                     {item.description}
                                 </p>
                             )}

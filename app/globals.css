@@ -421,23 +421,43 @@ body {
 {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.8rem;
+  gap: 0.4rem;
+  /* padding: 0.8rem; */
+  padding-top:0.5rem;
+  /* padding-left:0.5rem; */
   background-color: #ffffff49;
   border-radius: 1rem;
   border: 4px solid #4a6b4f;
   text-align: left;
 }
 
+.shop-card-header
+{
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.shop-card-name
+{
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #132a36;
+}
+
 .shop-card-image
 {
   width: 110%;
-  height: 180px;
+  height: 190px;
   object-fit: contain;
-  padding: 0.5rem;
+  padding: 0.75rem;
   background-color: #fff;
-  border-radius: 0.75rem;
-  border: 3px solid #4a6b4f;
+  border-radius: 0;
+  border-top: 3px solid #4a6b4f;
+  border-bottom: 3px solid #4a6b4f;
 }
 
 .shop-card-price
@@ -445,12 +465,23 @@ body {
   font-weight: 900;
   color: #132a36;
   font-size: 1.25rem;
+  white-space: nowrap;
 }
 
 .shop-card-fulfillment
 {
   font-style: italic;
   font-size: 0.85rem;
+  padding: 0.25rem 0.5rem;
+  padding-bottom: 0.5rem;
   color: #132a36;
   opacity: 0.8;
+}
+
+.shop-card-description
+{
+  font-size: 1.1rem;
+  color: #132a36;
+  padding: 0.25rem 0.5rem;
+  text-align: left;
 }
