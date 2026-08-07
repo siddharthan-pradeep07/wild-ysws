@@ -1,17 +1,18 @@
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { isAdminUser } from "@/lib/admin";
+import { isAdmin } from "@/lib/admin";
 import { listShopItems } from "@/lib/shop";
 import { listUsers } from "@/lib/users";
 import { createShopItemAction } from "./actions";
 import AdminTabs from "./AdminTabs";
 import ShopItemRow from "./ShopItemRow";
+import UserRoleSelect from "./UserRoleSelect";
 
 export default async function AdminPage()
 {
     const user = await getSessionUser();
 
-    if (!isAdminUser(user?.email))
+    if (!(await isAdmin(user?.email)))
     {
         redirect("/home");
     }
@@ -106,12 +107,14 @@ export default async function AdminPage()
                         <span>Name</span>
                         <span>Email</span>
                         <span>Slack ID</span>
+                        <span>Role</span>
                     </div>
                     {users.map((appUser) => (
                         <div key={appUser.id} className="users-table-row">
                             <span>{appUser.name || "—"}</span>
                             <span>{appUser.email || "—"}</span>
                             <span>{appUser.slackId || "—"}</span>
+                            <UserRoleSelect id={appUser.id} role={appUser.role} />
                         </div>
                     ))}
                 </div>

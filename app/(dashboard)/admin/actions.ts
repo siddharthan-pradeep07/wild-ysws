@@ -3,8 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
-import { isAdminUser } from "@/lib/admin";
+import { isAdmin } from "@/lib/admin";
 import { createShopItem, deleteShopItem, updateShopItem } from "@/lib/shop";
+import { updateUserRole, type UserRole } from "@/lib/users";
 
 // Every action re-checks admin status server-side, since Server Actions are
 // reachable via direct POST requests, not just through the admin page's UI.
@@ -12,7 +13,7 @@ async function requireAdmin()
 {
     const user = await getSessionUser();
 
-    if (!isAdminUser(user?.email))
+    if (!(await isAdmin(user?.email)))
     {
         redirect("/home");
     }
@@ -82,4 +83,21 @@ export async function deleteShopItemAction(formData: FormData)
 
     revalidatePath("/admin");
     revalidatePath("/shop");
+}
+
+export async function updateUserRoleAction(formData: FormData)
+{
+    await requireAdmin();
+
+    const id = parseId(formData);
+    const role = String(formData.get("role") ?? "").trim();
+
+    if (role !== "user" && role !== "admin")
+    {
+        throw new Error("Invalid role");
+    }
+
+    await updateUserRole(id, role as UserRole);
+
+    revalidatePath("/admin");
 }

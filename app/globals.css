@@ -44,7 +44,7 @@ body {
   /* background-color: #d66365; */
   border-radius: 1rem;
   /* border: 3px solid #4a6b4f; */
-  background-color: transparent;
+  background-color: #4a6b4fab;
   /* border: 4px dashed #020202; */
 
   /* border: 4px solid #000000; */
@@ -501,7 +501,8 @@ body {
 .users-table-row
 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: center;
   gap: 1rem;
   padding: 0.75rem 1rem;
   background-color: #ffffff49;
@@ -516,4 +517,15 @@ body {
   background-color: #4a6b4f;
   color: #ffffff;
   border-color: #4a6b4f;
+}
+
+.users-role-select
+{
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 3px solid #4a6b4f;
+  background-color: #ffffff;
+  color: #132a36;
+  font-weight: 700;
+  cursor: pointer;
 }

@@ -5,9 +5,11 @@ import {
     updateRecord,
 } from "@/lib/airtable";
 
-// Separate table from shop items, in the same Airtable base. Create it with
-// exactly these three single line text columns: Name, Email, Slack ID.
+// Same base as shop items, separate table. Columns: Name, Email, Slack ID
+// (single line text) and Role (single select: "user", "admin").
 const TABLE = process.env.AIRTABLE_USERS_TABLE_NAME ?? "Users";
+
+export type UserRole = "user" | "admin";
 
 export type AppUser =
 {
@@ -15,6 +17,7 @@ export type AppUser =
     name: string;
     email: string;
     slackId: string;
+    role: UserRole;
     createdAt: string;
 };
 
@@ -23,7 +26,13 @@ type UserFields =
     Name?: string;
     Email?: string;
     "Slack ID"?: string;
+    Role?: string;
 };
+
+function normalizeRole(role: string | undefined): UserRole
+{
+    return role === "admin" ? "admin" : "user";
+}
 
 function recordToUser(record: AirtableRecord<UserFields>): AppUser
 {
@@ -32,6 +41,7 @@ function recordToUser(record: AirtableRecord<UserFields>): AppUser
         name: record.fields.Name ?? "",
         email: record.fields.Email ?? "",
         slackId: record.fields["Slack ID"] ?? "",
+        role: normalizeRole(record.fields.Role),
         createdAt: record.createdTime,
     };
 }
@@ -60,6 +70,46 @@ function escapeFormulaValue(value: string): string
     return value.replace(/'/g, "\\'");
 }
 
+async function findUserRecordByEmail(
+    email: string
+): Promise<AirtableRecord<UserFields> | undefined>
+{
+    const records = await listRecords<UserFields>(TABLE, {
+        filterByFormula: `{Email} = '${escapeFormulaValue(email)}'`,
+        maxRecords: "1",
+    });
+
+    return records[0];
+}
+
+// Used for authorization on every dashboard page load. Callers should check
+// the env admin allowlist (lib/admin.ts) first — that's a free sync check;
+// this one costs an Airtable round trip and fails closed (non-admin) on
+// any error, so a misconfigured/missing Users table never grants access.
+export async function getUserRole(email: string | undefined | null): Promise<UserRole>
+{
+    if (!email)
+    {
+        return "user";
+    }
+
+    try
+    {
+        const record = await findUserRecordByEmail(email);
+        return normalizeRole(record?.fields.Role);
+    }
+    catch (err)
+    {
+        console.error("Failed to look up user role:", err);
+        return "user";
+    }
+}
+
+export async function updateUserRole(id: string, role: UserRole): Promise<void>
+{
+    await updateRecord<UserFields>(TABLE, id, { Role: role });
+}
+
 export type LoginInfo =
 {
     name: string;
@@ -69,6 +119,9 @@ export type LoginInfo =
 
 // Called from the OAuth callback on every login. Upserts by email so
 // returning users update their record instead of piling up duplicates.
+// Role is only ever set when the record is first created — never
+// overwritten on later logins, so a role granted from the admin panel
+// sticks instead of resetting back to "user" the next time they sign in.
 export async function recordUserLogin(data: LoginInfo): Promise<void>
 {
     if (!data.email)
@@ -76,23 +129,22 @@ export async function recordUserLogin(data: LoginInfo): Promise<void>
         return;
     }
 
-    const fields: UserFields = {
-        Name: data.name,
-        Email: data.email,
-        "Slack ID": data.slackId,
-    };
+    const existing = await findUserRecordByEmail(data.email);
 
-    const existing = await listRecords<UserFields>(TABLE, {
-        filterByFormula: `{Email} = '${escapeFormulaValue(data.email)}'`,
-        maxRecords: "1",
-    });
-
-    if (existing[0])
+    if (existing)
     {
-        await updateRecord<UserFields>(TABLE, existing[0].id, fields);
+        await updateRecord<UserFields>(TABLE, existing.id, {
+            Name: data.name,
+            "Slack ID": data.slackId,
+        });
     }
     else
     {
-        await createRecord<UserFields>(TABLE, fields);
+        await createRecord<UserFields>(TABLE, {
+            Name: data.name,
+            Email: data.email,
+            "Slack ID": data.slackId,
+            Role: "user",
+        });
     }
 }

@@ -8,7 +8,7 @@ export default async function ShopPage()
         <div className="text-left">
             {/* <div className="info-box"> */}
                 <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong padding-bottom-0.5">
-                    Shop Page
+                    guuppy shooopy
                 </h1>
             {/* </div> */}
 
