@@ -107,6 +107,7 @@ export default async function AdminPage()
                         <span>Name</span>
                         <span>Email</span>
                         <span>Slack ID</span>
+                        <span>Date of joining</span>
                         <span>Role</span>
                     </div>
                     {users.map((appUser) => (
@@ -114,6 +115,13 @@ export default async function AdminPage()
                             <span>{appUser.name || "—"}</span>
                             <span>{appUser.email || "—"}</span>
                             <span>{appUser.slackId || "—"}</span>
+                            <span>
+                                {new Date(appUser.createdAt).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                })}
+                            </span>
                             <UserRoleSelect id={appUser.id} role={appUser.role} />
                         </div>
                     ))}
