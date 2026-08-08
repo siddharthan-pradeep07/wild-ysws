@@ -62,7 +62,7 @@ export default async function AdminPage()
                         className="input-email"
                     />
                     <button type="submit" className="btn-primary self-start">
-                        Add Item
+                         Item.add
                     </button>
                 </form>
             </div>

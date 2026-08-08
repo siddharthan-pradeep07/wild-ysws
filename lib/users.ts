@@ -27,6 +27,7 @@ type UserFields =
     Email?: string;
     "Slack ID"?: string;
     Role?: string;
+    "Hackatime Connected"?: boolean;
 };
 
 function normalizeRole(role: string | undefined): UserRole
@@ -108,6 +109,41 @@ export async function getUserRole(email: string | undefined | null): Promise<Use
 export async function updateUserRole(id: string, role: UserRole): Promise<void>
 {
     await updateRecord<UserFields>(TABLE, id, { Role: role });
+}
+
+// Gates /projects and drives the prompt on /home. Fails closed (not
+// connected) on any error, same reasoning as getUserRole.
+export async function isHackatimeConnected(
+    email: string | undefined | null
+): Promise<boolean>
+{
+    if (!email)
+    {
+        return false;
+    }
+
+    try
+    {
+        const record = await findUserRecordByEmail(email);
+        return record?.fields["Hackatime Connected"] === true;
+    }
+    catch (err)
+    {
+        console.error("Failed to check Hackatime connection:", err);
+        return false;
+    }
+}
+
+export async function setHackatimeConnected(email: string): Promise<void>
+{
+    const record = await findUserRecordByEmail(email);
+
+    if (!record)
+    {
+        return;
+    }
+
+    await updateRecord<UserFields>(TABLE, record.id, { "Hackatime Connected": true });
 }
 
 export type LoginInfo =

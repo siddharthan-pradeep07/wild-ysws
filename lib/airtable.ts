@@ -3,6 +3,9 @@
 // Docs: https://airtable.com/developers/web/api/introduction
 
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
+// Attachment uploads go through a different host than every other Airtable
+// API call — see https://airtable.com/developers/web/api/upload-attachment
+const AIRTABLE_CONTENT_URL = "https://content.airtable.com/v0";
 
 function getConfig()
 {
@@ -112,4 +115,52 @@ export async function updateRecord<T extends object>(
 export async function deleteRecord(table: string, id: string): Promise<void>
 {
     await airtableFetch(recordUrl(table, id), { method: "DELETE" });
+}
+
+export type AirtableAttachment =
+{
+    id: string;
+    url: string;
+    filename: string;
+    size: number;
+    type: string;
+};
+
+// Uploads file bytes directly (base64) instead of making Airtable fetch a
+// public URL — the only way to attach a file that only exists as an
+// in-memory upload from a browser <input type="file">, with nowhere else
+// public it's hosted. The record must already exist; this attaches to one
+// of its existing Attachment fields.
+export async function uploadAttachment(
+    table: string,
+    recordId: string,
+    fieldName: string,
+    file: { base64: string; contentType: string; filename: string }
+): Promise<AirtableRecord<Record<string, AirtableAttachment[]>>>
+{
+    const { token, baseId } = getConfig();
+
+    const res = await fetch(
+        `${AIRTABLE_CONTENT_URL}/${baseId}/${recordId}/${encodeURIComponent(fieldName)}/uploadAttachment`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                contentType: file.contentType,
+                file: file.base64,
+                filename: file.filename,
+            }),
+        }
+    );
+
+    if (!res.ok)
+    {
+        const body = await res.text();
+        throw new Error(`Airtable attachment upload failed (${res.status}): ${body}`);
+    }
+
+    return res.json();
 }
