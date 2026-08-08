@@ -21,6 +21,7 @@ body {
 .btn-primary
 {
   padding: 0.75rem 1.5rem;
+  padding-left: 1.5rem;
   background-color: #4a6b4f;
   color: #ffffff;
   font-weight: 700;
@@ -432,6 +433,27 @@ body {
   background-color: #ffffff49;
   border-radius: 1rem;
   border: 3px solid #4a6b4f;
+}
+
+.shop-item-card-dragging
+{
+  opacity: 0.5;
+  border-style: dashed;
+}
+
+.shop-item-drag-handle
+{
+  flex-shrink: 0;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #4a6b4f;
+  cursor: grab;
+  user-select: none;
+}
+
+.shop-item-drag-handle:active
+{
+  cursor: grabbing;
 }
 
 .shop-item-thumb

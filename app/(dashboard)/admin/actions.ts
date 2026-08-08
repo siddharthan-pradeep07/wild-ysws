@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { isAdmin } from "@/lib/admin";
-import { createShopItem, deleteShopItem, updateShopItem } from "@/lib/shop";
+import {
+    createShopItem,
+    deleteShopItem,
+    reorderShopItems,
+    updateShopItem,
+} from "@/lib/shop";
 import { updateUserRole, type UserRole } from "@/lib/users";
 
 // Every action re-checks admin status server-side, since Server Actions are
@@ -80,6 +85,33 @@ export async function deleteShopItemAction(formData: FormData)
 
     const id = parseId(formData);
     await deleteShopItem(id);
+
+    revalidatePath("/admin");
+    revalidatePath("/shop");
+}
+
+export async function reorderShopItemsAction(formData: FormData)
+{
+    await requireAdmin();
+
+    const raw = String(formData.get("ids") ?? "");
+    let ids: unknown;
+
+    try
+    {
+        ids = JSON.parse(raw);
+    }
+    catch
+    {
+        throw new Error("Invalid order payload");
+    }
+
+    if (!Array.isArray(ids) || !ids.every((id) => typeof id === "string"))
+    {
+        throw new Error("Invalid order payload");
+    }
+
+    await reorderShopItems(ids);
 
     revalidatePath("/admin");
     revalidatePath("/shop");

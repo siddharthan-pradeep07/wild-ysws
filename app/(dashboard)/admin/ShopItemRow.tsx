@@ -4,7 +4,24 @@ import { useState } from "react";
 import type { ShopItem } from "@/lib/shop";
 import { deleteShopItemAction, updateShopItemAction } from "./actions";
 
-export default function ShopItemRow({ item }: { item: ShopItem })
+type ShopItemRowProps =
+{
+    item: ShopItem;
+    isDragging?: boolean;
+    onDragStart?: () => void;
+    onDragOver?: (event: React.DragEvent) => void;
+    onDrop?: (event: React.DragEvent) => void;
+    onDragEnd?: () => void;
+};
+
+export default function ShopItemRow({
+    item,
+    isDragging = false,
+    onDragStart,
+    onDragOver,
+    onDrop,
+    onDragEnd,
+}: ShopItemRowProps)
 {
     const [isEditing, setIsEditing] = useState(false);
 
@@ -76,7 +93,23 @@ export default function ShopItemRow({ item }: { item: ShopItem })
     }
 
     return (
-        <div className="shop-item-card">
+        <div
+            className={`shop-item-card ${isDragging ? "shop-item-card-dragging" : ""}`}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+        >
+            <span
+                className="shop-item-drag-handle"
+                draggable
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+                role="button"
+                tabIndex={-1}
+                aria-label={`Drag to reorder ${item.name}`}
+                title="Drag to reorder"
+            >
+                ⠿
+            </span>
             {item.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={item.imageUrl} alt={item.name} className="shop-item-thumb" />

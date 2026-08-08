@@ -41,6 +41,9 @@ export default async function WelcomePage()
         <a href="/api/auth/logout" className="btn-primary inline-block mt-6">
           Log out
         </a>
+        <a href="https://hackclub.com/privacy-and-terms" className="btn-primary inline-block mt-6">
+          Read Privacy & Terms
+        </a>
       </div>
     // </main>
   );

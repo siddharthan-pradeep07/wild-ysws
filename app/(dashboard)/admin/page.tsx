@@ -5,7 +5,7 @@ import { listShopItems } from "@/lib/shop";
 import { listUsers } from "@/lib/users";
 import { createShopItemAction } from "./actions";
 import AdminTabs from "./AdminTabs";
-import ShopItemRow from "./ShopItemRow";
+import ShopItemList from "./ShopItemList";
 import UserRoleSelect from "./UserRoleSelect";
 
 export default async function AdminPage()
@@ -75,11 +75,7 @@ export default async function AdminPage()
                 {items.length === 0 ? (
                     <p className="text-lg text-strong">No shop items yet.</p>
                 ) : (
-                    <div className="flex flex-col gap-4">
-                        {items.map((item) => (
-                            <ShopItemRow key={item.id} item={item} />
-                        ))}
-                    </div>
+                    <ShopItemList items={items} />
                 )}
             </div>
         </div>
