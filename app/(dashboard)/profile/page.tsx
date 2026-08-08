@@ -37,6 +37,10 @@ export default async function WelcomePage()
             </p>
           ))}
         </div>
+
+        <a href="/api/auth/logout" className="btn-primary inline-block mt-6">
+          Log out
+        </a>
       </div>
     // </main>
   );

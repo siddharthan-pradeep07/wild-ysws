@@ -26,7 +26,7 @@ body {
   color: #ffffff;
   font-weight: 700;
   border: 4px solid #4a6b4f;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   /* border: none; */
   cursor: pointer;
   white-space: nowrap;
@@ -35,7 +35,7 @@ body {
 .btn-primary:hover
 {
   /* background-color: #d66365; */
-  border-radius: 1rem;
+  /* border-radius: 1rem; */
   /* border: 3px solid #4a6b4f; */
   background-color: #4a6b4fab;
   /* border: 4px dashed #020202; */
@@ -50,7 +50,7 @@ body {
   border: 3.5px solid #070707;
   color: #000000;
   background-color: #ffffff94;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   font-size: 1.5rem;
   outline: none;
 }
