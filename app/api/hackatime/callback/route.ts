@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/session";
-import { setHackatimeConnected, setHackatimeProjects } from "@/lib/users";
+import { setHackatimeConnected, setHackatimeProjects, type HackatimeProjectStat } from "@/lib/users";
+
+type HackatimeProjectEntry =
+{
+    name?: string;
+    project?: string;
+    hours?: number;
+    total_seconds?: number;
+    seconds?: number;
+    total_time?: number;
+    grand_total?: { hours?: number; minutes?: number };
+};
 
 // Response shape isn't fully pinned down from docs alone — defensively
-// accept a few plausible wrappings around the project list.
-function extractProjectNames(payload: unknown): string[]
+// accept a few plausible wrappings around the project list, and a few
+// plausible shapes for the tracked-time value (Hackatime is WakaTime-API
+// compatible, so these mirror that family of APIs' common field names).
+function extractProjectStats(payload: unknown): HackatimeProjectStat[]
 {
     const list: unknown = Array.isArray(payload)
         ? payload
@@ -18,16 +31,47 @@ function extractProjectNames(payload: unknown): string[]
     }
 
     return list
-        .map((entry) =>
+        .map((raw): HackatimeProjectStat | null =>
         {
-            if (typeof entry === "string")
+            if (typeof raw === "string")
             {
-                return entry;
+                return { name: raw, hours: 0 };
             }
-            const obj = entry as { name?: string; project?: string };
-            return obj?.name ?? obj?.project ?? "";
+
+            const entry = raw as HackatimeProjectEntry;
+            const name = entry?.name ?? entry?.project ?? "";
+
+            if (!name)
+            {
+                return null;
+            }
+
+            let hours = 0;
+
+            if (typeof entry.hours === "number")
+            {
+                hours = entry.hours;
+            }
+            else if (typeof entry.total_seconds === "number")
+            {
+                hours = entry.total_seconds / 3600;
+            }
+            else if (typeof entry.seconds === "number")
+            {
+                hours = entry.seconds / 3600;
+            }
+            else if (typeof entry.total_time === "number")
+            {
+                hours = entry.total_time / 3600;
+            }
+            else if (entry.grand_total && typeof entry.grand_total.hours === "number")
+            {
+                hours = entry.grand_total.hours + (entry.grand_total.minutes ?? 0) / 60;
+            }
+
+            return { name, hours: Math.round(hours * 10) / 10 };
         })
-        .filter((name): name is string => Boolean(name));
+        .filter((v): v is HackatimeProjectStat => v !== null);
 }
 
 // Same rule as the login route — only ever redirect same-site.
@@ -77,7 +121,7 @@ export async function GET(request: NextRequest)
         { headers: { Authorization: `Bearer ${tokenData.access_token}` } }
     );
 
-    const names = projectsRes.ok ? extractProjectNames(await projectsRes.json()) : [];
+    const stats = projectsRes.ok ? extractProjectStats(await projectsRes.json()) : [];
 
     // Best-effort — a hiccup persisting this shouldn't strand the user on
     // an error page when the OAuth handshake itself already succeeded.
@@ -87,7 +131,7 @@ export async function GET(request: NextRequest)
         if (user?.email)
         {
             await setHackatimeConnected(user.email);
-            await setHackatimeProjects(user.email, names);
+            await setHackatimeProjects(user.email, stats);
         }
     }
     catch (err)

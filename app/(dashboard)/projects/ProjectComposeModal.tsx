@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Project } from "@/lib/projects";
 import { PROJECT_TYPES } from "@/lib/projects";
+import type { HackatimeProjectStat } from "@/lib/users";
 import { createProjectAction, deleteProjectAction, updateProjectAction } from "./actions";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -13,7 +14,7 @@ type ProjectComposeModalProps =
 {
     mode: "new" | "edit";
     project?: Project;
-    hackatimeProjects: string[];
+    hackatimeProjects: HackatimeProjectStat[];
 };
 
 export default function ProjectComposeModal({
@@ -67,7 +68,10 @@ export default function ProjectComposeModal({
     // fallen out of their live Hackatime list, so saving doesn't silently
     // drop it.
     const hackatimeOptions = Array.from(
-        new Set([...hackatimeProjects, ...(project?.hackatimeProject ? [project.hackatimeProject] : [])])
+        new Set([
+            ...hackatimeProjects.map((p) => p.name),
+            ...(project?.hackatimeProject ? [project.hackatimeProject] : []),
+        ])
     );
 
     if (isPending)
@@ -105,7 +109,7 @@ export default function ProjectComposeModal({
                         onClick={close}
                         aria-label="Close"
                     >
-                        ×
+                        ✕
                     </button>
                 </div>
 

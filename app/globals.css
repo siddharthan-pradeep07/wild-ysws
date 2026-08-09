@@ -555,6 +555,24 @@ body {
   width: 100%;
 }
 
+/* Projects lay out horizontally (row-first, wrapping) rather than in
+   .shop-grid's column grid — each card gets a flex-basis instead of a
+   grid track so they read left-to-right first. */
+.projects-grid
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.projects-grid .shop-card
+{
+  flex: 1 1 320px;
+  max-width: 380px;
+}
+
 .shop-card
 {
   display: flex;
@@ -577,6 +595,15 @@ body {
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
+}
+
+.shop-card-header-badges
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
 }
 
 .shop-card-name

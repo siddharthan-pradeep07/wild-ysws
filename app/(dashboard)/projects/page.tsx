@@ -18,7 +18,7 @@ export default async function ProjectsPage({
     if (!user?.email)
     {
         return (
-            <div className="info-box text-left">
+            <div className="text-left">
                 <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
                     Projects
                 </h1>
@@ -32,7 +32,7 @@ export default async function ProjectsPage({
     if (!connected)
     {
         return (
-            <div className="info-box text-left">
+            <div className="text-left">
                 <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
                     Projects
                 </h1>
@@ -52,15 +52,13 @@ export default async function ProjectsPage({
     const composeMode = params.compose === "edit" ? "edit" : params.compose === "new" ? "new" : null;
     const composeId = typeof params.id === "string" ? params.id : "";
 
-    // None of these four depend on each other's result, so run them
-    // concurrently instead of one-after-another. isAdmin/getHackatimeProjects
-    // share the same memoized user-record lookup under the hood (see
-    // lib/users.ts), so running them together doesn't double that fetch.
+    // hackatimeProjects is needed both for the compose form's dropdown and
+    // for showing tracked hours on every card, so it's fetched unconditionally.
     const [admin, projects, composeProject, hackatimeProjects] = await Promise.all([
         isAdmin(user.email),
         listProjectsByOwner(user.email), // own projects only — never a shared gallery
         composeMode === "edit" && composeId ? getProject(composeId) : Promise.resolve(undefined),
-        composeMode ? getHackatimeProjects(user.email) : Promise.resolve([]),
+        getHackatimeProjects(user.email),
     ]);
 
     const canEditCompose =
@@ -68,8 +66,12 @@ export default async function ProjectsPage({
             ? admin || composeProject.ownerEmail.toLowerCase() === user.email.toLowerCase()
             : true;
 
+    const hoursByHackatimeProject = new Map(
+        hackatimeProjects.map((p) => [p.name, p.hours])
+    );
+
     return (
-        <div className="info-box text-left">
+        <div className="text-left">
             <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
                 Projects
             </h1>
@@ -80,7 +82,7 @@ export default async function ProjectsPage({
                 </p>
             )}
 
-            <div className="shop-grid">
+            <div className="projects-grid">
                 <NewProjectCard />
                 {projects.map((project) => (
                     <ProjectCard
@@ -90,6 +92,7 @@ export default async function ProjectsPage({
                             admin ||
                             user.email!.toLowerCase() === project.ownerEmail.toLowerCase()
                         }
+                        hoursTracked={hoursByHackatimeProject.get(project.hackatimeProject)}
                     />
                 ))}
             </div>

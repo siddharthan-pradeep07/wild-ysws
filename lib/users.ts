@@ -157,13 +157,20 @@ export async function setHackatimeConnected(email: string): Promise<void>
     await updateRecord<UserFields>(TABLE, record.id, { "Hackatime Connected": true });
 }
 
-// Snapshot of a user's Hackatime projects, refreshed each time they go
-// through the OAuth connect/refresh flow. Lets the compose form render a
-// real <select> immediately on every page load instead of only right after
-// an OAuth redirect — the tradeoff is it can go stale until they refresh.
+export type HackatimeProjectStat =
+{
+    name: string;
+    hours: number;
+};
+
+// Snapshot of a user's Hackatime projects (with tracked hours), refreshed
+// each time they go through the OAuth connect/refresh flow. Lets the
+// compose form and project cards render immediately on every page load
+// instead of only right after an OAuth redirect — the tradeoff is it can
+// go stale until they refresh.
 export async function getHackatimeProjects(
     email: string | undefined | null
-): Promise<string[]>
+): Promise<HackatimeProjectStat[]>
 {
     if (!email)
     {
@@ -181,7 +188,30 @@ export async function getHackatimeProjects(
         }
 
         const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed.filter((v) => typeof v === "string") : [];
+
+        if (!Array.isArray(parsed))
+        {
+            return [];
+        }
+
+        return parsed
+            .map((entry): HackatimeProjectStat | null =>
+            {
+                // Back-compat with the older string[]-only snapshot format.
+                if (typeof entry === "string")
+                {
+                    return { name: entry, hours: 0 };
+                }
+                if (entry && typeof entry.name === "string")
+                {
+                    return {
+                        name: entry.name,
+                        hours: typeof entry.hours === "number" ? entry.hours : 0,
+                    };
+                }
+                return null;
+            })
+            .filter((v): v is HackatimeProjectStat => v !== null);
     }
     catch (err)
     {
@@ -190,7 +220,10 @@ export async function getHackatimeProjects(
     }
 }
 
-export async function setHackatimeProjects(email: string, names: string[]): Promise<void>
+export async function setHackatimeProjects(
+    email: string,
+    projects: HackatimeProjectStat[]
+): Promise<void>
 {
     const record = await findUserRecordByEmail(email);
 
@@ -200,7 +233,7 @@ export async function setHackatimeProjects(email: string, names: string[]): Prom
     }
 
     await updateRecord<UserFields>(TABLE, record.id, {
-        "Hackatime Projects": JSON.stringify(names),
+        "Hackatime Projects": JSON.stringify(projects),
     });
 }
 

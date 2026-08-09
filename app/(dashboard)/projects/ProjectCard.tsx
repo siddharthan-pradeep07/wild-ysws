@@ -4,18 +4,25 @@ import type { Project } from "@/lib/projects";
 export default function ProjectCard({
     project,
     canManage,
+    hoursTracked,
 }: {
     project: Project;
     canManage: boolean;
+    hoursTracked?: number | null;
 })
 {
     return (
         <div className="shop-card">
             <div className="shop-card-header">
                 <h2 className="shop-card-name">{project.name}</h2>
-                {project.projectType && (
-                    <span className="project-badge">{project.projectType}</span>
-                )}
+                <div className="shop-card-header-badges">
+                    {project.projectType && (
+                        <span className="project-badge">{project.projectType}</span>
+                    )}
+                    {!!hoursTracked && (
+                        <span className="project-badge">{hoursTracked}h</span>
+                    )}
+                </div>
             </div>
 
             {project.screenshotUrl && (
