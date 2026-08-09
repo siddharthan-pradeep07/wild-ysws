@@ -68,9 +68,6 @@ export default async function ProjectsPage({
 
     const composeMode = params.compose === "edit" ? "edit" : params.compose === "new" ? "new" : null;
     const composeId = typeof params.id === "string" ? params.id : "";
-
-    // hackatimeProjects is needed both for the compose form's dropdown and
-    // for showing tracked hours on every card, so it's fetched unconditionally.
     const [admin, projects, composeProject, hackatimeProjects] = await Promise.all([
         isAdmin(user.email),
         listProjectsByOwner(user.email), // own projects only — never a shared gallery

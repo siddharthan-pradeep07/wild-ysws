@@ -2,6 +2,14 @@ import Link from "next/link";
 import type { Project } from "@/lib/projects";
 import LinkPendingIndicator from "@/components/LinkPendingIndicator";
 
+// Cards sit side by side in a fixed-width horizontal grid — long names/
+// descriptions need a hard cap or they blow out the card instead of
+// wrapping nicely. Full text is still available via the title tooltip.
+function truncate(text: string, max: number)
+{
+    return text.length > max ? `${text.slice(0, max)}...` : text;
+}
+
 export default function ProjectCard({
     project,
     canManage,
@@ -15,7 +23,9 @@ export default function ProjectCard({
     return (
         <div className="shop-card">
             <div className="shop-card-header">
-                <h2 className="shop-card-name">{project.name}</h2>
+                <h2 className="shop-card-name" title={project.name}>
+                    {truncate(project.name, 10)}
+                </h2>
                 <div className="shop-card-header-badges">
                     {project.projectType && (
                         <span className="project-badge">{project.projectType}</span>
@@ -36,7 +46,9 @@ export default function ProjectCard({
             )}
 
             {project.description && (
-                <p className="shop-card-description">{project.description}</p>
+                <p className="shop-card-description" title={project.description}>
+                    {truncate(project.description, 39)}
+                </p>
             )}
 
             <div className="shop-item-actions px-2 pb-2">

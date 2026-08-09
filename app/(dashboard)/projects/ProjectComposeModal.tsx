@@ -26,17 +26,12 @@ export default function ProjectComposeModal({
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [pendingLabel, setPendingLabel] = useState("Saving...");
-
-    // Used once we're already inside a transition (after a successful
-    // save/delete) — just navigates, doesn't start its own transition.
     function close()
     {
         router.push("/projects");
     }
 
     // Used by the × button / backdrop click — starts the pending state
-    // itself, the instant it's pressed, rather than only showing feedback
-    // once save/delete logic decides to close.
     function handleCloseButton()
     {
         setPendingLabel("Closing...");
