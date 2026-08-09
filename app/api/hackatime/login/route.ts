@@ -26,13 +26,18 @@ export async function GET(request: NextRequest)
     authorizeUrl.searchParams.set("state", state);
 
     const response = NextResponse.redirect(authorizeUrl.toString());
+    const secure = process.env.NODE_ENV === "production";
     response.cookies.set("hackatime_oauth_state", state, {
         httpOnly: true,
+        secure,
+        sameSite: "lax",
         maxAge: 600,
         path: "/",
     });
     response.cookies.set("hackatime_return_to", returnTo, {
         httpOnly: true,
+        secure,
+        sameSite: "lax",
         maxAge: 600,
         path: "/",
     });

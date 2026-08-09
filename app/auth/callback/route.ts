@@ -72,6 +72,8 @@ export async function GET(request: NextRequest)
   }),
   {
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     maxAge: 60 * 60 * 24 * 30,
     path: "/",
   });
@@ -79,6 +81,8 @@ export async function GET(request: NextRequest)
   response.cookies.set("access_token", tokenData.access_token,
     {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
       maxAge: 60 * 60 * 24 * 30,
       path: "/",
     });

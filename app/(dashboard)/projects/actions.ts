@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { isAdmin } from "@/lib/admin";
+import { getUserRole } from "@/lib/users";
 import {
     createProject,
     deleteProject,
@@ -11,6 +12,10 @@ import {
     updateProject,
 } from "@/lib/projects";
 
+// The banned check on the /projects page only stops a banned user from
+// seeing the UI — Server Actions are reachable via direct POST regardless
+// of what's rendered, so it has to be re-checked here too or a banned user
+// could keep creating/editing/deleting projects through a raw request.
 async function requireUser()
 {
     const user = await getSessionUser();
@@ -18,6 +23,13 @@ async function requireUser()
     if (!user?.email)
     {
         redirect("/");
+    }
+
+    const role = await getUserRole(user.email);
+
+    if (role === "banned")
+    {
+        redirect("/projects");
     }
 
     return user;

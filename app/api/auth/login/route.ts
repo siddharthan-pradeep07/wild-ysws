@@ -13,7 +13,8 @@ export async function GET(request: NextRequest)
 
     const response = NextResponse.redirect(authorizeUrl.toString());
 
-    response.cookies.set("pending_email", email, {httpOnly:true, maxAge:600, path: "/"});
-    response.cookies.set("oauth_state", state, {httpOnly:true, maxAge:600, path: "/"});
+    const secure = process.env.NODE_ENV === "production";
+    response.cookies.set("pending_email", email, {httpOnly:true, secure, sameSite: "lax", maxAge:600, path: "/"});
+    response.cookies.set("oauth_state", state, {httpOnly:true, secure, sameSite: "lax", maxAge:600, path: "/"});
     return response;
 }
