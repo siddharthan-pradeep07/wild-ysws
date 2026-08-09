@@ -13,12 +13,12 @@ export default async function WelcomePage()
 
     const fields =
     [
-        {label: "name", value: user.name},
+        // {label: "name", value: user.name},
         {label: "email", value: user.email},
         {label: "slack id", value: user.slack_id},
-        {label: "verification status", value: user.verification_status},
+        // {label: "verification status", value: user.verification_status},
         {label: "YSWS eligibility", value: String(user.ysws_eligible)},
-        {label: "user id", value: user.sub},
+        // {label: "user id", value: user.sub},
     ];
 
     return (
@@ -38,10 +38,10 @@ export default async function WelcomePage()
           ))}
         </div>
 
-        <a href="/api/auth/logout" className="btn-primary inline-block mt-6">
+        <a href="/api/auth/logout" className="btn-secondary inline-block mt-6">
           Log out
         </a>
-        <a href="https://hackclub.com/privacy-and-terms" className="btn-primary inline-block mt-6">
+        <a href="https://hackclub.com/privacy-and-terms" className="btn-secondary inline-block mt-4">
           Read Privacy & Terms
         </a>
       </div>

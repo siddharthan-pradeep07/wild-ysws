@@ -12,7 +12,7 @@ export default async function HomeDashboardPage()
                 Welcome to the dashboard!
             </h1>
             <p className="text-lg text-strong">
-                ljiefbgsfdihvdfilhbd OVUIHEBFVOEFBVOWHFOVVHD 632197856123785640 $#$&^%^&$%$
+                the dashboard is under construction, feel free to explore the shop and try creating projects, Most of the work went towards making the admin panel which is sadly not visible to users, but hold tight I am about to make this website the best ysws website ever, reach out to @siddharthan in #wild or DMs (slack) if you have any questions or suggestions, and I will try to get back to you as soon as possible.
             </p>
 
             {user && !connected && (
