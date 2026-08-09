@@ -101,7 +101,11 @@ function inputToFields(
         "Demo URL": data.demoUrl,
         "Readme URL": data.readmeUrl,
         "AI Usage": data.aiUsage,
-        "Project Type": data.projectType,
+        // Airtable rejects "" for a single-select field — it would have to
+        // create a blank option, which the token isn't allowed to do.
+        // Omitting the key entirely (JSON.stringify drops undefined) just
+        // leaves the field unset instead.
+        "Project Type": data.projectType || undefined,
         "Hackatime Project": data.hackatimeProject,
     };
 }

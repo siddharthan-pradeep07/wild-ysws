@@ -167,26 +167,27 @@ export default function ProjectComposeModal({
                         <label className="text-sm font-bold text-strong">
                             Hackatime project
                         </label>
-                        <select
-                            name="hackatimeProject"
-                            defaultValue={project?.hackatimeProject ?? ""}
-                            className="input-email"
-                        >
-                            <option value="">None</option>
-                            {hackatimeOptions.map((name) => (
-                                <option key={name} value={name}>
-                                    {name}
-                                </option>
-                            ))}
-                        </select>
-                        <a
-                            href={`/api/hackatime/login?returnTo=${encodeURIComponent(connectReturnTo)}`}
-                            className="text-sm underline self-start"
-                        >
-                            {hackatimeProjects.length === 0
-                                ? "Connect Hackatime"
-                                : "Refresh from Hackatime"}
-                        </a>
+                        <div className="flex flex-row gap-2">
+                            <select
+                                name="hackatimeProject"
+                                defaultValue={project?.hackatimeProject ?? ""}
+                                className="input-email flex-1"
+                            >
+                                <option value="">None</option>
+                                {hackatimeOptions.map((name) => (
+                                    <option key={name} value={name}>
+                                        {name}
+                                    </option>
+                                ))}
+                            </select>
+                            <a
+                                href={`/api/hackatime/login?returnTo=${encodeURIComponent(connectReturnTo)}`}
+                                className="btn-primary shrink-0"
+                                title="Refresh your Hackatime project list"
+                            >
+                                ↻ Refresh
+                            </a>
+                        </div>
                     </div>
                 </form>
 
