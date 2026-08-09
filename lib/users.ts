@@ -28,6 +28,10 @@ type UserFields =
     "Slack ID"?: string;
     Role?: string;
     "Hackatime Connected"?: boolean;
+    // JSON-encoded string[] of Hackatime project names — a snapshot from
+    // the last time they connected/refreshed, not a live token. We never
+    // store the actual Hackatime access token anywhere.
+    "Hackatime Projects"?: string;
 };
 
 function normalizeRole(role: string | undefined): UserRole
@@ -144,6 +148,53 @@ export async function setHackatimeConnected(email: string): Promise<void>
     }
 
     await updateRecord<UserFields>(TABLE, record.id, { "Hackatime Connected": true });
+}
+
+// Snapshot of a user's Hackatime projects, refreshed each time they go
+// through the OAuth connect/refresh flow. Lets the compose form render a
+// real <select> immediately on every page load instead of only right after
+// an OAuth redirect — the tradeoff is it can go stale until they refresh.
+export async function getHackatimeProjects(
+    email: string | undefined | null
+): Promise<string[]>
+{
+    if (!email)
+    {
+        return [];
+    }
+
+    try
+    {
+        const record = await findUserRecordByEmail(email);
+        const raw = record?.fields["Hackatime Projects"];
+
+        if (!raw)
+        {
+            return [];
+        }
+
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.filter((v) => typeof v === "string") : [];
+    }
+    catch (err)
+    {
+        console.error("Failed to read Hackatime projects:", err);
+        return [];
+    }
+}
+
+export async function setHackatimeProjects(email: string, names: string[]): Promise<void>
+{
+    const record = await findUserRecordByEmail(email);
+
+    if (!record)
+    {
+        return;
+    }
+
+    await updateRecord<UserFields>(TABLE, record.id, {
+        "Hackatime Projects": JSON.stringify(names),
+    });
 }
 
 export type LoginInfo =

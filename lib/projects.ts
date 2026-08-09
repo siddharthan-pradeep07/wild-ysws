@@ -123,6 +123,33 @@ export async function listProjects(): Promise<Project[]>
     }
 }
 
+function escapeFormulaValue(value: string): string
+{
+    return value.replace(/'/g, "\\'");
+}
+
+// /projects only ever shows a user their own projects, not a shared
+// gallery — filtered server-side via Airtable's formula, not by fetching
+// everything and slicing client-side.
+export async function listProjectsByOwner(email: string): Promise<Project[]>
+{
+    try
+    {
+        const records = await listRecords<ProjectFields>(TABLE, {
+            filterByFormula: `LOWER({Owner Email}) = '${escapeFormulaValue(email.toLowerCase())}'`,
+        });
+
+        return records
+            .map(recordToProject)
+            .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    }
+    catch (err)
+    {
+        console.error("Failed to list projects for owner:", err);
+        return [];
+    }
+}
+
 export async function getProject(id: string): Promise<Project | undefined>
 {
     const records = await listRecords<ProjectFields>(TABLE, {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/session";
-import { setHackatimeConnected } from "@/lib/users";
+import { setHackatimeConnected, setHackatimeProjects } from "@/lib/users";
 
 // Response shape isn't fully pinned down from docs alone — defensively
 // accept a few plausible wrappings around the project list.
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest)
 
     const names = projectsRes.ok ? extractProjectNames(await projectsRes.json()) : [];
 
-    // Best-effort — a hiccup marking the flag shouldn't strand the user on
+    // Best-effort — a hiccup persisting this shouldn't strand the user on
     // an error page when the OAuth handshake itself already succeeded.
     try
     {
@@ -87,6 +87,7 @@ export async function GET(request: NextRequest)
         if (user?.email)
         {
             await setHackatimeConnected(user.email);
+            await setHackatimeProjects(user.email, names);
         }
     }
     catch (err)
@@ -94,16 +95,7 @@ export async function GET(request: NextRequest)
         console.error("Failed to record Hackatime connection:", err);
     }
 
-    const redirectUrl = new URL(returnTo, request.url);
-    redirectUrl.searchParams.set("pickHackatime", "1");
-
-    const response = NextResponse.redirect(redirectUrl);
-
-    response.cookies.set("hackatime_projects", JSON.stringify(names), {
-        httpOnly: true,
-        maxAge: 300,
-        path: "/",
-    });
+    const response = NextResponse.redirect(new URL(returnTo, request.url));
     response.cookies.delete("hackatime_oauth_state");
     response.cookies.delete("hackatime_return_to");
 
