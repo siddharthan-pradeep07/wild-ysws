@@ -1,3 +1,4 @@
+import { cache } from "react";
 import {
     AirtableRecord,
     createRecord,
@@ -75,17 +76,23 @@ function escapeFormulaValue(value: string): string
     return value.replace(/'/g, "\\'");
 }
 
-async function findUserRecordByEmail(
-    email: string
-): Promise<AirtableRecord<UserFields> | undefined>
-{
-    const records = await listRecords<UserFields>(TABLE, {
-        filterByFormula: `{Email} = '${escapeFormulaValue(email)}'`,
-        maxRecords: "1",
-    });
+// getUserRole/isHackatimeConnected/getHackatimeProjects are all called
+// independently — from the dashboard layout, the page itself, and often
+// more than once per request — and until now each one re-fetched this same
+// row from Airtable. cache() memoizes per-request (same email in, same
+// promise out), so a single page load costs at most one lookup instead of
+// three or four sequential ones.
+const findUserRecordByEmail = cache(
+    async (email: string): Promise<AirtableRecord<UserFields> | undefined> =>
+    {
+        const records = await listRecords<UserFields>(TABLE, {
+            filterByFormula: `{Email} = '${escapeFormulaValue(email)}'`,
+            maxRecords: "1",
+        });
 
-    return records[0];
-}
+        return records[0];
+    }
+);
 
 // Used for authorization on every dashboard page load. Callers should check
 // the env admin allowlist (lib/admin.ts) first — that's a free sync check;

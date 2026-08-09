@@ -49,19 +49,24 @@ export default async function ProjectsPage({
         );
     }
 
-    const admin = await isAdmin(user.email);
-    // Own projects only — this page is never a shared gallery.
-    const projects = await listProjectsByOwner(user.email);
-
     const composeMode = params.compose === "edit" ? "edit" : params.compose === "new" ? "new" : null;
     const composeId = typeof params.id === "string" ? params.id : "";
-    const composeProject = composeMode === "edit" && composeId ? await getProject(composeId) : undefined;
+
+    // None of these four depend on each other's result, so run them
+    // concurrently instead of one-after-another. isAdmin/getHackatimeProjects
+    // share the same memoized user-record lookup under the hood (see
+    // lib/users.ts), so running them together doesn't double that fetch.
+    const [admin, projects, composeProject, hackatimeProjects] = await Promise.all([
+        isAdmin(user.email),
+        listProjectsByOwner(user.email), // own projects only — never a shared gallery
+        composeMode === "edit" && composeId ? getProject(composeId) : Promise.resolve(undefined),
+        composeMode ? getHackatimeProjects(user.email) : Promise.resolve([]),
+    ]);
+
     const canEditCompose =
         composeMode === "edit" && composeProject
             ? admin || composeProject.ownerEmail.toLowerCase() === user.email.toLowerCase()
             : true;
-
-    const hackatimeProjects = composeMode ? await getHackatimeProjects(user.email) : [];
 
     return (
         <div className="info-box text-left">

@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Project } from "@/lib/projects";
 import { PROJECT_TYPES } from "@/lib/projects";
 import { createProjectAction, deleteProjectAction, updateProjectAction } from "./actions";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const FORM_ID = "project-compose-form";
 
@@ -21,29 +23,39 @@ export default function ProjectComposeModal({
 }: ProjectComposeModalProps)
 {
     const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const [pendingLabel, setPendingLabel] = useState("Saving...");
 
     function close()
     {
         router.push("/projects");
     }
 
-    async function handleSave(formData: FormData)
+    function handleSave(formData: FormData)
     {
-        if (mode === "edit")
+        setPendingLabel(mode === "edit" ? "Saving changes..." : "Creating project...");
+        startTransition(async () =>
         {
-            await updateProjectAction(formData);
-        }
-        else
-        {
-            await createProjectAction(formData);
-        }
-        close();
+            if (mode === "edit")
+            {
+                await updateProjectAction(formData);
+            }
+            else
+            {
+                await createProjectAction(formData);
+            }
+            close();
+        });
     }
 
-    async function handleDelete(formData: FormData)
+    function handleDelete(formData: FormData)
     {
-        await deleteProjectAction(formData);
-        close();
+        setPendingLabel("Deleting project...");
+        startTransition(async () =>
+        {
+            await deleteProjectAction(formData);
+            close();
+        });
     }
 
     const connectReturnTo =
@@ -57,6 +69,22 @@ export default function ProjectComposeModal({
     const hackatimeOptions = Array.from(
         new Set([...hackatimeProjects, ...(project?.hackatimeProject ? [project.hackatimeProject] : [])])
     );
+
+    if (isPending)
+    {
+        return (
+            <div className="modal-backdrop" role="presentation">
+                <div
+                    className="modal-panel"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={mode === "edit" ? "Edit project" : "New project"}
+                >
+                    <LoadingSpinner label={pendingLabel} />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="modal-backdrop" role="presentation" onClick={close}>

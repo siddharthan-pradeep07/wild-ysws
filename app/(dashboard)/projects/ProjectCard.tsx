@@ -11,18 +11,25 @@ export default function ProjectCard({
 {
     return (
         <div className="shop-card">
-            {project.screenshotUrl ? (
+            <div className="shop-card-header">
+                <h2 className="shop-card-name">{project.name}</h2>
+                {project.projectType && (
+                    <span className="project-badge">{project.projectType}</span>
+                )}
+            </div>
+
+            {project.screenshotUrl && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                     src={project.screenshotUrl}
                     alt={project.name}
                     className="shop-card-image"
                 />
-            ) : (
-                <div className="shop-item-thumb shop-item-thumb-empty" aria-hidden="true" />
             )}
 
-            <h2 className="shop-card-name px-2">{project.name}</h2>
+            {project.description && (
+                <p className="shop-card-description">{project.description}</p>
+            )}
 
             <div className="shop-item-actions px-2 pb-2">
                 {canManage && (
