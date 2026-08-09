@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Project } from "@/lib/projects";
+import LinkPendingIndicator from "@/components/LinkPendingIndicator";
 
 export default function ProjectCard({
     project,
@@ -42,6 +43,7 @@ export default function ProjectCard({
                 {canManage && (
                     <Link href={`/projects?compose=edit&id=${project.id}`} className="btn-secondary">
                         Edit
+                        <LinkPendingIndicator />
                     </Link>
                 )}
                 <button type="button" className="btn-secondary">

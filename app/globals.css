@@ -859,6 +859,19 @@ body {
   gap: 0.75rem;
 }
 
+/* Compact existing-screenshot preview in the edit form — .shop-card-image
+   (190px tall) badly unbalanced this grid row against the much shorter
+   Code/Demo/Readme stack next to it. */
+.modal-image-preview
+{
+  width: 100%;
+  max-height: 110px;
+  object-fit: contain;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: 2px solid #4a6b4f;
+}
+
 .loading-spinner-wrap
 {
   display: flex;
@@ -894,5 +907,22 @@ body {
   font-size: 1.1rem;
   color: #132a36;
   letter-spacing: 0.02em;
+}
+
+/* Small variant that sits inline inside a colored button (Edit / New
+   project links) — fires the instant the link is clicked via useLinkStatus,
+   independent of how long the destination page itself takes to load. */
+.link-pending-spinner
+{
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  border-radius: 50%;
+  border: 2.5px solid #ffffff77;
+  border-top-color: #ffffff;
+  border-right-color: #ffffff;
+  animation: loading-spin 0.7s linear infinite;
 }
 

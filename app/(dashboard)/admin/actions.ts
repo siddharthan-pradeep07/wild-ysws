@@ -124,7 +124,7 @@ export async function updateUserRoleAction(formData: FormData)
     const id = parseId(formData);
     const role = String(formData.get("role") ?? "").trim();
 
-    if (role !== "user" && role !== "admin")
+    if (role !== "user" && role !== "admin" && role !== "banned")
     {
         throw new Error("Invalid role");
     }

@@ -27,9 +27,20 @@ export default function ProjectComposeModal({
     const [isPending, startTransition] = useTransition();
     const [pendingLabel, setPendingLabel] = useState("Saving...");
 
+    // Used once we're already inside a transition (after a successful
+    // save/delete) — just navigates, doesn't start its own transition.
     function close()
     {
         router.push("/projects");
+    }
+
+    // Used by the × button / backdrop click — starts the pending state
+    // itself, the instant it's pressed, rather than only showing feedback
+    // once save/delete logic decides to close.
+    function handleCloseButton()
+    {
+        setPendingLabel("Closing...");
+        startTransition(close);
     }
 
     function handleSave(formData: FormData)
@@ -88,7 +99,7 @@ export default function ProjectComposeModal({
     }
 
     return (
-        <div className="modal-backdrop" role="presentation" onClick={close}>
+        <div className="modal-backdrop" role="presentation" onClick={handleCloseButton}>
             <div
                 className="modal-panel"
                 role="dialog"
@@ -103,7 +114,7 @@ export default function ProjectComposeModal({
                     <button
                         type="button"
                         className="modal-close"
-                        onClick={close}
+                        onClick={handleCloseButton}
                         aria-label="Close"
                     >
                         ✕
@@ -118,8 +129,7 @@ export default function ProjectComposeModal({
                     <input
                         name="name"
                         defaultValue={project?.name}
-                        placeholder="Name *"  // <span color='red'>*</span>
-
+                        placeholder="Name *"
                         required
                         className="input-email"
                     />
@@ -153,7 +163,7 @@ export default function ProjectComposeModal({
                             <img
                                 src={project.screenshotUrl}
                                 alt={project.name}
-                                className="shop-card-image"
+                                className="modal-image-preview"
                             />
                         )}
                         <input

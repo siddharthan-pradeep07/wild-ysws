@@ -1,7 +1,7 @@
 import { getProject, listProjectsByOwner } from "@/lib/projects";
 import { getSessionUser } from "@/lib/session";
 import { isAdmin } from "@/lib/admin";
-import { getHackatimeProjects, isHackatimeConnected } from "@/lib/users";
+import { getHackatimeProjects, getUserRole, isHackatimeConnected } from "@/lib/users";
 import NewProjectCard from "./NewProjectCard";
 import ProjectCard from "./ProjectCard";
 import ProjectComposeModal from "./ProjectComposeModal";
@@ -23,6 +23,23 @@ export default async function ProjectsPage({
                     Projects
                 </h1>
                 <p className="text-lg text-strong">Log in to view and submit projects.</p>
+            </div>
+        );
+    }
+
+    const role = await getUserRole(user.email);
+
+    if (role === "banned")
+    {
+        return (
+            <div className="text-left">
+                <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong">
+                    Projects
+                </h1>
+                <p className="text-lg text-strong">
+                    heya! you have been banned from submitting projects to wild, please
+                    reachout to @siddharthan if you think this is an unfair decision
+                </p>
             </div>
         );
     }

@@ -7,10 +7,10 @@ import {
 } from "@/lib/airtable";
 
 // Same base as shop items, separate table. Columns: Name, Email, Slack ID
-// (single line text) and Role (single select: "user", "admin").
+// (single line text) and Role (single select: "user", "admin", "banned").
 const TABLE = process.env.AIRTABLE_USERS_TABLE_NAME ?? "Users";
 
-export type UserRole = "user" | "admin";
+export type UserRole = "user" | "admin" | "banned";
 
 export type AppUser =
 {
@@ -38,7 +38,11 @@ type UserFields =
 
 function normalizeRole(role: string | undefined): UserRole
 {
-    return role === "admin" ? "admin" : "user";
+    if (role === "admin" || role === "banned")
+    {
+        return role;
+    }
+    return "user";
 }
 
 function recordToUser(record: AirtableRecord<UserFields>): AppUser
