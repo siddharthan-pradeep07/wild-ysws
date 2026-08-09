@@ -104,6 +104,7 @@ export default async function AdminPage()
                         <span>Email</span>
                         <span>Slack ID</span>
                         <span>Date of joining</span>
+                        <span>Hackatime connected</span>
                         <span>Role</span>
                     </div>
                     {users.map((appUser) => (
@@ -118,6 +119,7 @@ export default async function AdminPage()
                                     day: "numeric",
                                 })}
                             </span>
+                            <span>{appUser.hackatimeConnected ? "Yes" : "No"}</span>
                             <UserRoleSelect id={appUser.id} role={appUser.role} />
                         </div>
                     ))}

@@ -19,6 +19,7 @@ export type AppUser =
     email: string;
     slackId: string;
     role: UserRole;
+    hackatimeConnected: boolean;
     createdAt: string;
 };
 
@@ -48,6 +49,7 @@ function recordToUser(record: AirtableRecord<UserFields>): AppUser
         email: record.fields.Email ?? "",
         slackId: record.fields["Slack ID"] ?? "",
         role: normalizeRole(record.fields.Role),
+        hackatimeConnected: record.fields["Hackatime Connected"] === true,
         createdAt: record.createdTime,
     };
 }

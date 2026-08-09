@@ -64,9 +64,6 @@ export default function ProjectComposeModal({
             ? `/projects?compose=edit&id=${project.id}`
             : "/projects?compose=new";
 
-    // Always include the project's already-linked value even if it's since
-    // fallen out of their live Hackatime list, so saving doesn't silently
-    // drop it.
     const hackatimeOptions = Array.from(
         new Set([
             ...hackatimeProjects.map((p) => p.name),
@@ -121,7 +118,8 @@ export default function ProjectComposeModal({
                     <input
                         name="name"
                         defaultValue={project?.name}
-                        placeholder="Name"
+                        placeholder="Name *"  // <span color='red'>*</span>
+
                         required
                         className="input-email"
                     />
@@ -141,7 +139,7 @@ export default function ProjectComposeModal({
                     <textarea
                         name="description"
                         defaultValue={project?.description}
-                        placeholder="Description"
+                        placeholder="Description *"
                         rows={3}
                         className="input-email project-form-span-2"
                     />
@@ -190,7 +188,7 @@ export default function ProjectComposeModal({
                     <textarea
                         name="aiUsage"
                         defaultValue={project?.aiUsage}
-                        placeholder="AI justification — how did you use AI on this project?"
+                        placeholder="AI justification — how did you use AI on this project? (Required if you used AI)"
                         rows={3}
                         className="input-email project-form-span-2"
                     />
@@ -205,7 +203,7 @@ export default function ProjectComposeModal({
                                 defaultValue={project?.hackatimeProject ?? ""}
                                 className="input-email flex-1"
                             >
-                                <option value="">None</option>
+                                <option value="">select hackatime project</option>
                                 {hackatimeOptions.map((name) => (
                                     <option key={name} value={name}>
                                         {name}
@@ -214,7 +212,7 @@ export default function ProjectComposeModal({
                             </select>
                             <a
                                 href={`/api/hackatime/login?returnTo=${encodeURIComponent(connectReturnTo)}`}
-                                className="btn-primary shrink-0"
+                                className="btn-secondary shrink-0"
                                 title="Refresh your Hackatime project list"
                             >
                                 ↻ Refresh
@@ -226,19 +224,18 @@ export default function ProjectComposeModal({
                 <div className="shop-item-actions mt-4">
                     {mode === "edit" && project && (
                         <>
-                            {/* Placebo for now — no handler, does nothing. */}
-                            <button type="button" className="btn-primary">
-                                Submit
-                            </button>
                             <form action={handleDelete}>
                                 <input type="hidden" name="id" value={project.id} />
-                                <button type="submit" className="btn-danger">
+                                <button type="submit" className="btn-secondary-danger">
                                     Delete
                                 </button>
                             </form>
+                            <button type="button" className="btn-secondary">
+                                Submit
+                            </button>
                         </>
                     )}
-                    <button type="submit" form={FORM_ID} className="btn-primary">
+                    <button type="submit" form={FORM_ID} className="btn-secondary" title="save changes">
                         Save
                     </button>
                 </div>

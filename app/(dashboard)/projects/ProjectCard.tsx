@@ -40,12 +40,11 @@ export default function ProjectCard({
 
             <div className="shop-item-actions px-2 pb-2">
                 {canManage && (
-                    <Link href={`/projects?compose=edit&id=${project.id}`} className="btn-primary">
+                    <Link href={`/projects?compose=edit&id=${project.id}`} className="btn-secondary">
                         Edit
                     </Link>
                 )}
-                {/* Placebo for now — no handler, no form action, genuinely does nothing. */}
-                <button type="button" className="btn-primary">
+                <button type="button" className="btn-secondary">
                     Submit
                 </button>
             </div>

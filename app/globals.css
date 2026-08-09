@@ -54,6 +54,52 @@ body {
   background-color: #a83232be;
 }
 
+.btn-secondary
+{
+  padding: 0.75rem 1.5rem;
+  padding-left: 1.5rem;
+  display: flex;
+  align-items: center;
+  background-color: #4a6b4f;
+  color: #ffffff;
+  height: 2.8rem;
+  /* text-align: center; */
+  /* vertical-align: middle; */
+  font-weight: 500;
+  border: 4px solid #4a6b4f;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover
+{
+  background-color: #4a6b4fc9;
+}
+
+.btn-secondary-danger
+{
+  padding: 0.75rem 1.5rem;
+  padding-left: 1.5rem;
+  display: flex;
+  align-items: center;
+  background-color: #a83232;
+  color: #ffffff;
+  height: 2.8rem;
+  /* text-align: center; */
+  /* vertical-align: middle; */
+  font-weight: 500;
+  border: 4px solid #a83232;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-secondary-danger:hover
+{
+  background-color: #a83232be;
+}
+
 .input-email
 {
   flex: 1;
@@ -648,7 +694,9 @@ body {
   font-size: 1.1rem;
   color: #132a36;
   padding: 0.25rem 0.5rem;
+  padding-bottom: 0.5rem;
   text-align: left;
+  border-bottom: #4a6b4f 3px solid;
 }
 
 .users-table
@@ -661,7 +709,7 @@ body {
 .users-table-row
 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
   align-items: center;
   gap: 1rem;
   padding: 0.75rem 1rem;
@@ -697,6 +745,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
+  min-width: 380px;
   min-height: 260px;
   border-radius: 1rem;
   border: 4px dashed #4a6b4f;
@@ -730,7 +779,7 @@ body {
   justify-content: center;
   padding: 2rem;
   overflow-y: auto;
-  background-color: #a3b18a80;
+  background-color: #3a3a3ad3; /*correct amount of blur*/
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border: none;
@@ -779,7 +828,7 @@ body {
 {
   background: none;
   border: none;
-  font-size: 1.75rem;
+  font-size: 1.8rem;
   line-height: 1;
   font-weight: 900;
   color: #132a36;
