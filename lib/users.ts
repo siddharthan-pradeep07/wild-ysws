@@ -20,7 +20,14 @@ export type AppUser =
     slackId: string;
     role: UserRole;
     hackatimeConnected: boolean;
+    hackatimeConnectedAt: string;
     createdAt: string;
+    userId: string;
+    yswsEligible: boolean;
+    verificationStatus: string;
+    lastLogin: string;
+    loginCount: number;
+    internalNote: string;
 };
 
 type UserFields =
@@ -34,6 +41,16 @@ type UserFields =
     // the last time they connected/refreshed, not a live token. We never
     // store the actual Hackatime access token anywhere.
     "Hackatime Projects"?: string;
+    "Hackatime Connected At"?: string;
+    // Hack Club's stable subject identifier (OAuth `sub`) — not the same as
+    // the Airtable record id, this is the identity Hack Club itself uses.
+    "User ID"?: string;
+    "YSWS Eligible"?: boolean;
+    "Verification Status"?: string;
+    "Last Login"?: string;
+    "Login Count"?: number;
+    // Admin-only — never shown to the user it's about.
+    "Internal Note"?: string;
 };
 
 function normalizeRole(role: string | undefined): UserRole
@@ -54,7 +71,14 @@ function recordToUser(record: AirtableRecord<UserFields>): AppUser
         slackId: record.fields["Slack ID"] ?? "",
         role: normalizeRole(record.fields.Role),
         hackatimeConnected: record.fields["Hackatime Connected"] === true,
+        hackatimeConnectedAt: record.fields["Hackatime Connected At"] ?? "",
         createdAt: record.createdTime,
+        userId: record.fields["User ID"] ?? "",
+        yswsEligible: record.fields["YSWS Eligible"] === true,
+        verificationStatus: record.fields["Verification Status"] ?? "",
+        lastLogin: record.fields["Last Login"] ?? "",
+        loginCount: record.fields["Login Count"] ?? 0,
+        internalNote: record.fields["Internal Note"] ?? "",
     };
 }
 
@@ -160,7 +184,17 @@ export async function setHackatimeConnected(email: string): Promise<void>
         return;
     }
 
-    await updateRecord<UserFields>(TABLE, record.id, { "Hackatime Connected": true });
+    await updateRecord<UserFields>(TABLE, record.id, {
+        "Hackatime Connected": true,
+        "Hackatime Connected At": new Date().toISOString(),
+    });
+}
+
+// Admin-only field, edited from the Users tab's expanded row detail — never
+// exposed anywhere the user it's about could see it.
+export async function updateInternalNote(id: string, note: string): Promise<void>
+{
+    await updateRecord<UserFields>(TABLE, id, { "Internal Note": note });
 }
 
 export type HackatimeProjectStat =
@@ -248,6 +282,12 @@ export type LoginInfo =
     name: string;
     email: string;
     slackId: string;
+    // From Hack Club's OAuth userinfo response — sub is their stable user
+    // id, the other two can change between logins (e.g. re-verification),
+    // so unlike Role these are refreshed on every login, not just creation.
+    sub?: string;
+    verificationStatus?: string;
+    yswsEligible?: boolean;
 };
 
 // Called from the OAuth callback on every login. Upserts by email so
@@ -263,12 +303,18 @@ export async function recordUserLogin(data: LoginInfo): Promise<void>
     }
 
     const existing = await findUserRecordByEmail(data.email);
+    const now = new Date().toISOString();
 
     if (existing)
     {
         await updateRecord<UserFields>(TABLE, existing.id, {
             Name: data.name,
             "Slack ID": data.slackId,
+            "User ID": data.sub,
+            "Verification Status": data.verificationStatus,
+            "YSWS Eligible": data.yswsEligible === true,
+            "Last Login": now,
+            "Login Count": (existing.fields["Login Count"] ?? 0) + 1,
         });
     }
     else
@@ -278,6 +324,11 @@ export async function recordUserLogin(data: LoginInfo): Promise<void>
             Email: data.email,
             "Slack ID": data.slackId,
             Role: "user",
+            "User ID": data.sub,
+            "Verification Status": data.verificationStatus,
+            "YSWS Eligible": data.yswsEligible === true,
+            "Last Login": now,
+            "Login Count": 1,
         });
     }
 }

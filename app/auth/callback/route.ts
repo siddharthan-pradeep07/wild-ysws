@@ -53,6 +53,9 @@ export async function GET(request: NextRequest)
       name: user.name,
       email: user.email,
       slackId: user.slack_id,
+      sub: user.sub,
+      verificationStatus: user.verification_status,
+      yswsEligible: user.ysws_eligible === true,
     });
   }
   catch (err)

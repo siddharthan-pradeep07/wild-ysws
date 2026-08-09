@@ -6,7 +6,7 @@ import { listUsers } from "@/lib/users";
 import { createShopItemAction } from "./actions";
 import AdminTabs from "./AdminTabs";
 import ShopItemList from "./ShopItemList";
-import UserRoleSelect from "./UserRoleSelect";
+import UserRow from "./UserRow";
 
 export default async function AdminPage()
 {
@@ -106,22 +106,10 @@ export default async function AdminPage()
                         <span>Date of joining</span>
                         <span>Hackatime connected</span>
                         <span>Role</span>
+                        <span aria-hidden="true"></span>
                     </div>
                     {users.map((appUser) => (
-                        <div key={appUser.id} className="users-table-row">
-                            <span>{appUser.name || "—"}</span>
-                            <span>{appUser.email || "—"}</span>
-                            <span>{appUser.slackId || "—"}</span>
-                            <span>
-                                {new Date(appUser.createdAt).toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                })}
-                            </span>
-                            <span>{appUser.hackatimeConnected ? "Yes" : "No"}</span>
-                            <UserRoleSelect id={appUser.id} role={appUser.role} />
-                        </div>
+                        <UserRow key={appUser.id} appUser={appUser} />
                     ))}
                 </div>
             )}

@@ -10,7 +10,7 @@ import {
     reorderShopItems,
     updateShopItem,
 } from "@/lib/shop";
-import { updateUserRole, type UserRole } from "@/lib/users";
+import { updateInternalNote, updateUserRole, type UserRole } from "@/lib/users";
 
 // Every action re-checks admin status server-side, since Server Actions are
 // reachable via direct POST requests, not just through the admin page's UI.
@@ -130,6 +130,18 @@ export async function updateUserRoleAction(formData: FormData)
     }
 
     await updateUserRole(id, role as UserRole);
+
+    revalidatePath("/admin");
+}
+
+export async function updateInternalNoteAction(formData: FormData)
+{
+    await requireAdmin();
+
+    const id = parseId(formData);
+    const note = String(formData.get("note") ?? "");
+
+    await updateInternalNote(id, note);
 
     revalidatePath("/admin");
 }
