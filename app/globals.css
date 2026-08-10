@@ -379,8 +379,8 @@ body {
 
 .user-avatar-image
 {
-  width: 130px;
-  height: 130px;
+  width: 90px;
+  height: 90px;
   border-radius: 10%;
   border: 3px solid #ffffff;
   object-fit: cover;
@@ -697,6 +697,105 @@ body {
   padding-bottom: 0.5rem;
   text-align: left;
   border-bottom: #4a6b4f 3px solid;
+}
+
+.shop-card-actions
+{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0 0.5rem 0.5rem;
+  margin-top: auto;
+}
+
+.shop-card-actions .btn-secondary
+{
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  justify-content: center;
+  text-align: center;
+}
+
+.shop-card-star
+{
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 0.9rem;
+  border: 3.5px solid #4a6b4f;
+  background-color: transparent;
+  /* font-size: 1.5rem; */
+  color: #4a6b4f;
+  cursor: pointer;
+}
+
+.shop-card-star:hover:not(:disabled)
+{
+  background-color: #4a6b4fc9;
+  color: #ffffff;
+}
+
+.shop-card-star:disabled
+{
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.shop-card-star-active
+{
+  border-color: #4a6b4f;
+  background-color: #4a6b4f;
+  color: #ede551;
+}
+
+/* .shop-card-star-active:hover:not(:disabled)
+{
+  background-color: #4a6b4fc9;
+  color: #ffffff;
+} */
+
+.featured-box
+{
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #ffffff49;
+  border-radius: 1rem;
+  border: 4px solid #4a6b4f;
+  text-align: left;
+}
+
+.featured-box-header
+{
+  margin-bottom: 1rem;
+}
+
+.featured-box-hint
+{
+  font-size: 0.9rem;
+  color: #132a36;
+  opacity: 0.75;
+  margin-top: 0.25rem;
+}
+
+.featured-box-row
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.featured-box-row .shop-card
+{
+  flex: 1 1 300px;
+  max-width: 380px;
 }
 
 .users-table

@@ -51,6 +51,7 @@ type UserFields =
     "Login Count"?: number;
     // Admin-only — never shown to the user it's about.
     "Internal Note"?: string;
+    "Featured Items"?: string;
 };
 
 function normalizeRole(role: string | undefined): UserRole
@@ -195,6 +196,73 @@ export async function setHackatimeConnected(email: string): Promise<void>
 export async function updateInternalNote(id: string, note: string): Promise<void>
 {
     await updateRecord<UserFields>(TABLE, id, { "Internal Note": note });
+}
+
+function parseFeaturedItems(raw: string | undefined): string[]
+{
+    if (!raw)
+    {
+        return [];
+    }
+
+    try
+    {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === "string") : [];
+    }
+    catch
+    {
+        return [];
+    }
+}
+
+export async function getFeaturedItemIds(email: string | undefined | null): Promise<string[]>
+{
+    if (!email)
+    {
+        return [];
+    }
+
+    try
+    {
+        const record = await findUserRecordByEmail(email);
+        return parseFeaturedItems(record?.fields["Featured Items"]);
+    }
+    catch (err)
+    {
+        console.error("Failed to read featured items:", err);
+        return [];
+    }
+}
+
+export async function toggleFeaturedItem(email: string, itemId: string): Promise<string[]>
+{
+    const record = await findUserRecordByEmail(email);
+
+    if (!record)
+    {
+        return [];
+    }
+
+    const current = parseFeaturedItems(record.fields["Featured Items"]);
+
+    let next: string[];
+
+    if (current.includes(itemId))
+    {
+        next = current.filter((id) => id !== itemId);
+    }
+    else if (current.length >= 3)
+    {
+        return current;
+    }
+    else
+    {
+        next = [...current, itemId];
+    }
+
+    await updateRecord<UserFields>(TABLE, record.id, { "Featured Items": JSON.stringify(next) });
+    return next;
 }
 
 export type HackatimeProjectStat =
