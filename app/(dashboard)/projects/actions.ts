@@ -13,9 +13,10 @@ import {
 } from "@/lib/projects";
 
 // The banned check on the /projects page only stops a banned user from
-// seeing the UI — Server Actions are reachable via direct POST regardless
-// of what's rendered, so it has to be re-checked here too or a banned user
-// could keep creating/editing/deleting projects through a raw request.
+// seeing the UI. Server Actions can be reached with a direct POST
+// regardless of what's rendered, so this has to be checked again here
+// too, otherwise a banned user could keep creating, editing or deleting
+// projects through a raw request.
 async function requireUser()
 {
     const user = await getSessionUser();
@@ -84,9 +85,10 @@ function parseId(formData: FormData): string
     return id;
 }
 
-// Reachable via direct POST regardless of whether the Edit/Delete buttons
-// are even rendered client-side — so ownership is re-checked here, not
-// just used to decide what the UI shows.
+// This can be reached with a direct POST regardless of whether the Edit
+// or Delete buttons are even rendered on the client, so ownership gets
+// checked again here rather than only being used to decide what the UI
+// shows.
 async function requireOwnerOrAdmin(projectId: string, userEmail: string)
 {
     const project = await getProject(projectId);

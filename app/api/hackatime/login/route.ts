@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Only ever a same-site path — never let a query param send someone off
-// this domain after OAuth completes.
+// This only ever allows a same site path, so a query param can never send
+// someone off this domain after OAuth completes.
 function sanitizeReturnTo(value: string | null): string
 {
     if (!value || !value.startsWith("/") || value.startsWith("//"))

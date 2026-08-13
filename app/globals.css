@@ -889,6 +889,26 @@ body {
   gap: 0.5rem;
 }
 
+.projects-table-row
+{
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.4fr 1fr 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #ffffff49;
+  border-radius: 0.75rem;
+  border: 3px solid #4a6b4f;
+  color: #132a36;
+}
+
+.admin-detail-link
+{
+  color: #132a36;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
 .new-project-card
 {
   display: flex;

@@ -70,7 +70,7 @@ export default async function ProjectsPage({
     const composeId = typeof params.id === "string" ? params.id : "";
     const [admin, projects, composeProject, hackatimeProjects] = await Promise.all([
         isAdmin(user.email),
-        listProjectsByOwner(user.email), // own projects only — never a shared gallery
+        listProjectsByOwner(user.email), // shows only the user's own projects, never a shared gallery
         composeMode === "edit" && composeId ? getProject(composeId) : Promise.resolve(undefined),
         getHackatimeProjects(user.email),
     ]);

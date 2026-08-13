@@ -31,7 +31,8 @@ export default function ProjectComposeModal({
         router.push("/projects");
     }
 
-    // Used by the × button / backdrop click — starts the pending state
+    // Runs when the close button or the backdrop is clicked, and starts
+    // the pending state right away.
     function handleCloseButton()
     {
         setPendingLabel("Closing...");

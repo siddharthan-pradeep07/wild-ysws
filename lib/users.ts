@@ -6,8 +6,9 @@ import {
     updateRecord,
 } from "@/lib/airtable";
 
-// Same base as shop items, separate table. Columns: Name, Email, Slack ID
-// (single line text) and Role (single select: "user", "admin", "banned").
+// This table lives in the same Airtable base as shop items. It has Name,
+// Email and Slack ID as single line text columns, plus a Role single
+// select field with the options user, admin and banned.
 const TABLE = process.env.AIRTABLE_USERS_TABLE_NAME ?? "Users";
 
 export type UserRole = "user" | "admin" | "banned";
@@ -37,19 +38,20 @@ type UserFields =
     "Slack ID"?: string;
     Role?: string;
     "Hackatime Connected"?: boolean;
-    // JSON-encoded string[] of Hackatime project names — a snapshot from
-    // the last time they connected/refreshed, not a live token. We never
-    // store the actual Hackatime access token anywhere.
+    // Holds a JSON encoded list of Hackatime project names. It's just a
+    // snapshot from the last time the user connected or refreshed, not a
+    // live token, since we never store their actual Hackatime access token.
     "Hackatime Projects"?: string;
     "Hackatime Connected At"?: string;
-    // Hack Club's stable subject identifier (OAuth `sub`) — not the same as
-    // the Airtable record id, this is the identity Hack Club itself uses.
+    // Hack Club's own stable identifier for the user, the OAuth sub value.
+    // It's different from the Airtable record id, this is the identity
+    // Hack Club itself uses.
     "User ID"?: string;
     "YSWS Eligible"?: boolean;
     "Verification Status"?: string;
     "Last Login"?: string;
     "Login Count"?: number;
-    // Admin-only — never shown to the user it's about.
+    // Only admins can see this field, it's never shown to the user it's about.
     "Internal Note"?: string;
     "Featured Items"?: string;
 };
@@ -95,8 +97,9 @@ export async function listUsers(): Promise<AppUser[]>
     }
     catch (err)
     {
-        // Don't take down the whole admin page over the Users tab — e.g.
-        // the Users table hasn't been created in Airtable yet.
+        // A failure here shouldn't take down the whole admin page just because
+        // of the Users tab, for example if the Users table hasn't been
+        // created in Airtable yet.
         console.error("Failed to list users:", err);
         return [];
     }
@@ -107,12 +110,11 @@ function escapeFormulaValue(value: string): string
     return value.replace(/'/g, "\\'");
 }
 
-// getUserRole/isHackatimeConnected/getHackatimeProjects are all called
-// independently — from the dashboard layout, the page itself, and often
-// more than once per request — and until now each one re-fetched this same
-// row from Airtable. cache() memoizes per-request (same email in, same
-// promise out), so a single page load costs at most one lookup instead of
-// three or four sequential ones.
+// getUserRole, isHackatimeConnected and getHackatimeProjects are all called
+// independently, from the dashboard layout, the page itself, and often more
+// than once per request. Each one used to re-fetch this same row from
+// Airtable on its own. cache() memoizes the lookup per request, so a single
+// page load now costs at most one Airtable call instead of three or four.
 const findUserRecordByEmail = cache(
     async (email: string): Promise<AirtableRecord<UserFields> | undefined> =>
     {
@@ -125,10 +127,11 @@ const findUserRecordByEmail = cache(
     }
 );
 
-// Used for authorization on every dashboard page load. Callers should check
-// the env admin allowlist (lib/admin.ts) first — that's a free sync check;
-// this one costs an Airtable round trip and fails closed (non-admin) on
-// any error, so a misconfigured/missing Users table never grants access.
+// This runs on every dashboard page load to check authorization. Callers
+// should check the env admin allowlist in lib/admin.ts first, since that's
+// a free, synchronous check. This one costs an Airtable round trip and
+// fails closed to non-admin on any error, so a misconfigured or missing
+// Users table can never accidentally grant access.
 export async function getUserRole(email: string | undefined | null): Promise<UserRole>
 {
     if (!email)
@@ -153,8 +156,8 @@ export async function updateUserRole(id: string, role: UserRole): Promise<void>
     await updateRecord<UserFields>(TABLE, id, { Role: role });
 }
 
-// Gates /projects and drives the prompt on /home. Fails closed (not
-// connected) on any error, same reasoning as getUserRole.
+// Gates access to /projects and drives the connect prompt on /home. Fails
+// closed to not connected on any error, for the same reason as getUserRole.
 export async function isHackatimeConnected(
     email: string | undefined | null
 ): Promise<boolean>
@@ -191,8 +194,8 @@ export async function setHackatimeConnected(email: string): Promise<void>
     });
 }
 
-// Admin-only field, edited from the Users tab's expanded row detail — never
-// exposed anywhere the user it's about could see it.
+// Admin-only field, edited from the Users tab's expanded row detail. It's
+// never exposed anywhere the user it's about could see it.
 export async function updateInternalNote(id: string, note: string): Promise<void>
 {
     await updateRecord<UserFields>(TABLE, id, { "Internal Note": note });
@@ -271,11 +274,11 @@ export type HackatimeProjectStat =
     hours: number;
 };
 
-// Snapshot of a user's Hackatime projects (with tracked hours), refreshed
-// each time they go through the OAuth connect/refresh flow. Lets the
-// compose form and project cards render immediately on every page load
-// instead of only right after an OAuth redirect — the tradeoff is it can
-// go stale until they refresh.
+// A snapshot of a user's Hackatime projects and tracked hours, refreshed
+// each time they go through the OAuth connect or refresh flow. This lets
+// the compose form and project cards render immediately on every page
+// load instead of only right after an OAuth redirect. The tradeoff is that
+// it can go stale until the user refreshes again.
 export async function getHackatimeProjects(
     email: string | undefined | null
 ): Promise<HackatimeProjectStat[]>
@@ -305,7 +308,8 @@ export async function getHackatimeProjects(
         return parsed
             .map((entry): HackatimeProjectStat | null =>
             {
-                // Back-compat with the older string[]-only snapshot format.
+                // Kept for backwards compatibility with the older format,
+                // which was just a plain array of strings.
                 if (typeof entry === "string")
                 {
                     return { name: entry, hours: 0 };
@@ -350,19 +354,21 @@ export type LoginInfo =
     name: string;
     email: string;
     slackId: string;
-    // From Hack Club's OAuth userinfo response — sub is their stable user
-    // id, the other two can change between logins (e.g. re-verification),
-    // so unlike Role these are refreshed on every login, not just creation.
+    // These come from Hack Club's OAuth userinfo response. sub is their
+    // stable user id, while the other two can change between logins, for
+    // example after re-verification. Unlike Role, they get refreshed on
+    // every login instead of only when the record is first created.
     sub?: string;
     verificationStatus?: string;
     yswsEligible?: boolean;
 };
 
-// Called from the OAuth callback on every login. Upserts by email so
-// returning users update their record instead of piling up duplicates.
-// Role is only ever set when the record is first created — never
-// overwritten on later logins, so a role granted from the admin panel
-// sticks instead of resetting back to "user" the next time they sign in.
+// Called from the OAuth callback on every login. It upserts by email so
+// returning users update their existing record instead of piling up
+// duplicates. Role only gets set when the record is first created and is
+// never overwritten on later logins, so a role granted from the admin
+// panel sticks instead of resetting back to user the next time someone
+// signs in.
 export async function recordUserLogin(data: LoginInfo): Promise<void>
 {
     if (!data.email)

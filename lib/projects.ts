@@ -8,9 +8,12 @@ import {
     uploadAttachment,
 } from "@/lib/airtable";
 
-// Same base as shop items and users, separate table. PROJECT_TYPES below
-// must match the Project Type single-select options in Airtable exactly.
+// This lives in the same Airtable base as shop items and users, in its own
+// table. The PROJECT_TYPES list below has to match the Project Type single
+// select options in Airtable exactly.
 const TABLE = process.env.AIRTABLE_PROJECTS_TABLE_NAME ?? "Projects";
+
+export const DEFAULT_PROJECT_IMAGE_URL = "https://cdn.hackclub.com/019ff685-303d-79c0-889b-58bdd041d614/wild_image_not_found.png";
 
 export const PROJECT_TYPES = [
     "Web Playable",
@@ -66,8 +69,9 @@ function recordToProject(record: AirtableRecord<ProjectFields>): Project
         codeUrl: record.fields["Code URL"] ?? "",
         demoUrl: record.fields["Demo URL"] ?? "",
         readmeUrl: record.fields["Readme URL"] ?? "",
-        // Airtable attachment URLs are signed and expire after a few hours —
-        // always read this fresh from a live record, never cache/store it.
+        // Airtable attachment URLs are signed and expire after a few hours,
+        // so this should always be read fresh from a live record and never
+        // cached or stored.
         screenshotUrl: record.fields.Screenshot?.[0]?.url ?? "",
         aiUsage: record.fields["AI Usage"] ?? "",
         projectType: record.fields["Project Type"] ?? "",
@@ -101,10 +105,11 @@ function inputToFields(
         "Demo URL": data.demoUrl,
         "Readme URL": data.readmeUrl,
         "AI Usage": data.aiUsage,
-        // Airtable rejects "" for a single-select field — it would have to
-        // create a blank option, which the token isn't allowed to do.
-        // Omitting the key entirely (JSON.stringify drops undefined) just
-        // leaves the field unset instead.
+        // Airtable rejects an empty string for a single select field, since
+        // it would have to create a blank option and the token isn't
+        // allowed to do that. Leaving the key out entirely, since
+        // JSON.stringify drops undefined values, just leaves the field
+        // unset instead.
         "Project Type": data.projectType || undefined,
         "Hackatime Project": data.hackatimeProject,
     };
@@ -132,9 +137,9 @@ function escapeFormulaValue(value: string): string
     return value.replace(/'/g, "\\'");
 }
 
-// /projects only ever shows a user their own projects, not a shared
-// gallery — filtered server-side via Airtable's formula, not by fetching
-// everything and slicing client-side.
+// The /projects page only ever shows a user their own projects, not a
+// shared gallery. This filters server side with an Airtable formula
+// rather than fetching everything and slicing it down on the client.
 export async function listProjectsByOwner(email: string): Promise<Project[]>
 {
     try
@@ -194,7 +199,7 @@ export async function createProject(
 
     await attachScreenshot(record.id, screenshot);
 
-    // Re-fetch to get the attachment's Airtable-hosted URL.
+    // Fetches the record again to get the attachment's Airtable hosted URL.
     return (await getProject(record.id)) ?? recordToProject(record);
 }
 
@@ -211,8 +216,9 @@ export async function updateProject(
         return recordToProject(record);
     }
 
-    // uploadAttachment appends — clear the field first so a new screenshot
-    // replaces the old one instead of accumulating.
+    // uploadAttachment appends rather than replaces, so the field gets
+    // cleared first, otherwise a new screenshot would just pile up next to
+    // the old one instead of replacing it.
     await updateRecord<ProjectFields>(TABLE, id, { Screenshot: [] });
     await attachScreenshot(id, screenshot);
 

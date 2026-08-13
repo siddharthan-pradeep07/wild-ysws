@@ -12,12 +12,13 @@ export default function ShopItemList({ items }: { items: ShopItem[] })
     const [draggedId, setDraggedId] = useState<string | null>(null);
     const [, startTransition] = useTransition();
 
-    // Re-sync whenever the server sends fresh data (adding/editing/deleting
-    // an item, another admin reordering, or our own reorder round-tripping)
-    // — otherwise this component's local state would keep showing stale
-    // items after those actions revalidate the page. Adjusted directly
-    // during render (React's documented pattern for this) rather than in
-    // an effect, which would cost an extra render pass.
+    // This re-syncs whenever the server sends fresh data, whether that's
+    // adding, editing or deleting an item, another admin reordering, or
+    // our own reorder round tripping back. Without it, this component's
+    // local state would keep showing stale items after those actions
+    // revalidate the page. The state gets adjusted directly during
+    // render, which is React's documented pattern for this, rather than
+    // in an effect, which would cost an extra render pass.
     if (items !== prevItems)
     {
         setPrevItems(items);

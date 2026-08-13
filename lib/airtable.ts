@@ -1,10 +1,10 @@
-// Minimal Airtable REST API client — no SDK dependency, just fetch, matching
-// how the rest of this app talks to the Hack Club OAuth API.
-// Docs: https://airtable.com/developers/web/api/introduction
+// This is a minimal Airtable REST API client with no SDK dependency, just
+// plain fetch calls, matching how the rest of this app talks to the Hack
+// Club OAuth API. Docs: https://airtable.com/developers/web/api/introduction
 
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 // Attachment uploads go through a different host than every other Airtable
-// API call — see https://airtable.com/developers/web/api/upload-attachment
+// API call. See https://airtable.com/developers/web/api/upload-attachment
 const AIRTABLE_CONTENT_URL = "https://content.airtable.com/v0";
 
 function getConfig()
@@ -40,8 +40,8 @@ async function airtableFetch(url: string, init?: RequestInit)
             "Content-Type": "application/json",
             ...(init?.headers ?? {}),
         },
-        // Always hit Airtable directly — this is admin data, not something
-        // we want Next.js caching stale copies of.
+        // This always hits Airtable directly, since this is admin data and
+        // not something we want Next.js caching stale copies of.
         cache: "no-store",
     });
 
@@ -126,11 +126,11 @@ export type AirtableAttachment =
     type: string;
 };
 
-// Uploads file bytes directly (base64) instead of making Airtable fetch a
-// public URL — the only way to attach a file that only exists as an
-// in-memory upload from a browser <input type="file">, with nowhere else
-// public it's hosted. The record must already exist; this attaches to one
-// of its existing Attachment fields.
+// Uploads file bytes directly as base64 instead of making Airtable fetch a
+// public URL. This is the only option for attaching a file that only
+// exists as an in-memory upload from a browser file input and isn't
+// hosted anywhere public. The record has to already exist, since this
+// attaches to one of its existing Attachment fields.
 export async function uploadAttachment(
     table: string,
     recordId: string,

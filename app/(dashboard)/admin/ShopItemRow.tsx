@@ -25,8 +25,9 @@ export default function ShopItemRow({
 {
     const [isEditing, setIsEditing] = useState(false);
 
-    // Wrap the server action so it can be droped back into display mode once the
-    // save round-trips, instead of leaving the edit form open indefinitely.
+    // This wraps the server action so the row can drop back into display
+    // mode once the save round trips, instead of leaving the edit form
+    // open indefinitely.
     async function handleUpdate(formData: FormData)
     {
         await updateShopItemAction(formData);

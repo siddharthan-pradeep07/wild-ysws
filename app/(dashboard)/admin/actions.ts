@@ -12,8 +12,9 @@ import {
 } from "@/lib/shop";
 import { updateInternalNote, updateUserRole, type UserRole } from "@/lib/users";
 
-// Every action re-checks admin status server-side, since Server Actions are
-// reachable via direct POST requests, not just through the admin page's UI.
+// Every action here re-checks admin status on the server, since Server
+// Actions can be reached with a direct POST request and not just through
+// the admin page's UI.
 async function requireAdmin()
 {
     const user = await getSessionUser();

@@ -43,10 +43,10 @@ export async function GET(request: NextRequest)
   });
 
   const user = await userRes.json();
-  // user.email, user.name, user.sub
+  // This response gives us user.email, user.name and user.sub.
 
-  // Best-effort — logging a login must never block the login itself, even
-  // if Airtable or the Users table isn't set up yet.
+  // This is best effort. Logging a login should never block the login
+  // itself, even if Airtable or the Users table isn't set up yet.
   try
   {
     await recordUserLogin({

@@ -2,11 +2,13 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/session";
 import { isAdmin } from "@/lib/admin";
 import { listShopItems } from "@/lib/shop";
+import { listProjects } from "@/lib/projects";
 import { listUsers } from "@/lib/users";
 import { createShopItemAction } from "./actions";
 import AdminTabs from "./AdminTabs";
 import ShopItemList from "./ShopItemList";
 import UserRow from "./UserRow";
+import ProjectRow from "./ProjectRow";
 
 export default async function AdminPage()
 {
@@ -19,6 +21,11 @@ export default async function AdminPage()
 
     const items = await listShopItems();
     const users = await listUsers();
+    const projects = await listProjects();
+
+    const slackByEmail = new Map(
+        users.filter((appUser) => appUser.email).map((appUser) => [appUser.email.toLowerCase(), appUser.slackId])
+    );
 
     const shopTabContent = (
         <div className="flex flex-col gap-8">
@@ -89,6 +96,36 @@ export default async function AdminPage()
         </div>
     );
 
+    const projectsTabContent = (
+        <div className="admin-panel-section text-left">
+            <h2 className="text-xl md:text-2xl font-bold mb-6 text-strong">
+                Projects ({projects.length})
+            </h2>
+
+            {projects.length === 0 ? (
+                <p className="text-lg text-strong">No projects submitted yet.</p>
+            ) : (
+                <div className="users-table">
+                    <div className="projects-table-row users-table-header">
+                        <span>Name</span>
+                        <span>Owner</span>
+                        <span>Email</span>
+                        <span>Type</span>
+                        <span>Submitted</span>
+                        <span aria-hidden="true"></span>
+                    </div>
+                    {projects.map((project) => (
+                        <ProjectRow
+                            key={project.id}
+                            project={project}
+                            slackId={slackByEmail.get(project.ownerEmail.toLowerCase()) ?? ""}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+
     const usersTabContent = (
         <div className="admin-panel-section text-left">
             <h2 className="text-xl md:text-2xl font-bold mb-6 text-strong">
@@ -125,6 +162,11 @@ export default async function AdminPage()
             <AdminTabs
                 tabs={[
                     { key: "shop", label: "Shop", content: shopTabContent },
+                    {
+                        key: "projects",
+                        label: "Projects",
+                        content: projectsTabContent,
+                    },
                     {
                         key: "placeholder-1",
                         label: "review",

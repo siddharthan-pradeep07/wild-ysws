@@ -1,10 +1,11 @@
 import Link from "next/link";
-import type { Project } from "@/lib/projects";
+import { DEFAULT_PROJECT_IMAGE_URL, type Project } from "@/lib/projects";
 import LinkPendingIndicator from "@/components/LinkPendingIndicator";
 
-// Cards sit side by side in a fixed-width horizontal grid — long names/
-// descriptions need a hard cap or they blow out the card instead of
-// wrapping nicely. Full text is still available via the title tooltip.
+// Cards sit side by side in a fixed width horizontal grid, so long names
+// and descriptions need a hard cap or they blow out the card instead of
+// wrapping nicely. The full text is still available through the title
+// tooltip on hover.
 function truncate(text: string, max: number)
 {
     return text.length > max ? `${text.slice(0, max)}...` : text;
@@ -36,10 +37,10 @@ export default function ProjectCard({
                 </div>
             </div>
 
-            {project.screenshotUrl && (
+            {(project.screenshotUrl || DEFAULT_PROJECT_IMAGE_URL) && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                    src={project.screenshotUrl}
+                    src={project.screenshotUrl || DEFAULT_PROJECT_IMAGE_URL}
                     alt={project.name}
                     className="shop-card-image"
                 />

@@ -13,10 +13,11 @@ type HackatimeProjectEntry =
     grand_total?: { hours?: number; minutes?: number };
 };
 
-// Response shape isn't fully pinned down from docs alone — defensively
-// accept a few plausible wrappings around the project list, and a few
-// plausible shapes for the tracked-time value (Hackatime is WakaTime-API
-// compatible, so these mirror that family of APIs' common field names).
+// The response shape isn't fully pinned down from the docs alone, so this
+// defensively accepts a few plausible wrappings around the project list
+// and a few plausible shapes for the tracked time value. Hackatime is
+// WakaTime API compatible, so these mirror that family of APIs' common
+// field names.
 function extractProjectStats(payload: unknown): HackatimeProjectStat[]
 {
     const list: unknown = Array.isArray(payload)
@@ -74,7 +75,7 @@ function extractProjectStats(payload: unknown): HackatimeProjectStat[]
         .filter((v): v is HackatimeProjectStat => v !== null);
 }
 
-// Same rule as the login route — only ever redirect same-site.
+// Same rule as the login route, this only ever redirects to a same site path.
 function sanitizeReturnTo(value: string | undefined): string
 {
     if (!value || !value.startsWith("/") || value.startsWith("//"))
@@ -123,8 +124,8 @@ export async function GET(request: NextRequest)
 
     const stats = projectsRes.ok ? extractProjectStats(await projectsRes.json()) : [];
 
-    // Best-effort — a hiccup persisting this shouldn't strand the user on
-    // an error page when the OAuth handshake itself already succeeded.
+    // This is best effort. A hiccup saving this data shouldn't strand the
+    // user on an error page when the OAuth handshake itself already succeeded.
     try
     {
         const user = await getSessionUser();

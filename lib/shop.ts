@@ -20,9 +20,10 @@ export type ShopItem =
     createdAt: string;
 };
 
-// Field names must match the columns in the Airtable shop items table
-// (table name configurable via AIRTABLE_TABLE_NAME). Order is a plain
-// Number field — lower sorts first — that the admin drag handle rewrites.
+// Field names here must match the columns in the Airtable shop items
+// table, whose name is configurable via AIRTABLE_TABLE_NAME. Order is a
+// plain Number field, with lower values sorting first, and the admin drag
+// handle is what rewrites it.
 type ShopItemFields =
 {
     Name: string;
@@ -73,8 +74,8 @@ export async function listShopItems(): Promise<ShopItem[]>
 
     return records
         .map(recordToItem)
-        // Items that predate the Order field (or share a value) fall back
-        // to creation order rather than jumbling arbitrarily.
+        // Items that predate the Order field, or share the same value, fall
+        // back to creation order instead of ending up in an arbitrary jumble.
         .sort((a, b) => a.order - b.order || a.createdAt.localeCompare(b.createdAt));
 }
 
@@ -107,9 +108,9 @@ export async function deleteShopItem(id: string): Promise<void>
     await deleteRecord(TABLE, id);
 }
 
-// Persists a drag-and-drop reorder: each id's new Order is its index in
-// the given array. Fires one PATCH per item in parallel — fine at the
-// scale of a shop's item list.
+// Persists a drag and drop reorder. Each item's new Order value is just
+// its index in the given array, and this fires one PATCH per item in
+// parallel, which is fine at the scale of a shop's item list.
 export async function reorderShopItems(orderedIds: string[]): Promise<void>
 {
     await Promise.all(

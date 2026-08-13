@@ -1,10 +1,11 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-// The session_user cookie carries the user's identity (including email,
-// which authorization checks in lib/admin.ts key off of). httpOnly only
-// stops JS from reading it — it does nothing to stop a client from sending
-// a hand-edited cookie value. Signing it means a tampered value fails
-// verification and is treated as logged-out, instead of being trusted.
+// The session_user cookie carries the user's identity, including their
+// email, which the authorization checks in lib/admin.ts key off of.
+// httpOnly only stops JavaScript from reading the cookie, it does nothing
+// to stop a client from sending a hand edited value. Signing the cookie
+// means a tampered value fails verification and gets treated as logged
+// out instead of being trusted.
 
 function getSecret(): string
 {
@@ -61,8 +62,8 @@ export function verifySessionCookie<T>(raw: string | undefined | null): T | null
         return null;
     }
 
-    // Constant-time comparison — a naive === here would let an attacker
-    // time their way to a valid signature byte-by-byte.
+    // This is a constant time comparison. A plain === here would let an
+    // attacker time their way to a valid signature one byte at a time.
     if (expected.length !== actual.length || !timingSafeEqual(expected, actual))
     {
         return null;

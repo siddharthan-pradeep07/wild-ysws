@@ -1,7 +1,7 @@
-// Hack Club's own OAuth identity (lib/auth.ts, lib/session.ts) has no
-// avatar field — see app/(dashboard)/admin history for why. Slack itself is
-// the only source for the profile picture, via a Bot Token with the
-// users:read scope, installed to the workspace the slack_id belongs to.
+// Hack Club's own OAuth identity in lib/auth.ts and lib/session.ts doesn't
+// include an avatar field. Slack is the only source for the profile
+// picture, fetched with a Bot Token that has the users:read scope,
+// installed to the workspace the slack_id belongs to.
 
 type SlackUsersInfoResponse =
 {
@@ -39,8 +39,9 @@ export async function getSlackAvatarUrl(slackId: string): Promise<string | null>
             return null;
         }
 
-        // Slack's Web API returns HTTP 200 even for API-level errors
-        // (bad token, unknown user, missing scope) — `ok` is the real signal.
+        // Slack's Web API returns HTTP 200 even for API level errors, like a
+        // bad token, unknown user, or missing scope. The ok field in the
+        // response body is the real signal for whether it worked.
         const data = (await res.json()) as SlackUsersInfoResponse;
 
         if (!data.ok)
