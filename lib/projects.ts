@@ -10,7 +10,6 @@ import {
 
 // This lives in the same Airtable base as shop items and users, in its own
 // table. The PROJECT_TYPES list below has to match the Project Type single
-// select options in Airtable exactly.
 const TABLE = process.env.AIRTABLE_PROJECTS_TABLE_NAME ?? "Projects";
 
 export const DEFAULT_PROJECT_IMAGE_URL = "https://cdn.hackclub.com/019ff685-303d-79c0-889b-58bdd041d614/wild_image_not_found.png";

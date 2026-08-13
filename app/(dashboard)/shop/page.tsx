@@ -26,6 +26,12 @@ export default async function ShopPage()
                 <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong padding-bottom-0.5">
                     Shop
                 </h1>
+                <p className="featured-box-hint">
+                    The list of the items or prices may change. 
+                </p>
+                <p className="featured-box-hint mb-6">
+                    1 approved hour = 1 bark
+                </p>
             {/* </div> */}
 
             {featuredItems.length > 0 && (

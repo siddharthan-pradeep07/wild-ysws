@@ -677,6 +677,21 @@ body {
   color: #132a36;
   font-size: 1.25rem;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.currency-icon
+{
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.shop-card-actions .btn-secondary .currency-icon
+{
+  margin-left: 0.3rem;
 }
 
 .shop-card-fulfillment

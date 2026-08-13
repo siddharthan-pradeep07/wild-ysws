@@ -1,5 +1,6 @@
 import type { ShopItem } from "@/lib/shop";
 import FeatureStarButton from "./FeatureStarButton";
+import CurrencyIcon from "@/components/CurrencyIcon";
 
 export default function ShopCard({
     item,
@@ -15,7 +16,9 @@ export default function ShopCard({
         <div className="shop-card">
             <div className="shop-card-header">
                 <h2 className="shop-card-name">{item.name}</h2>
-                <span className="shop-card-price">{item.price} barks</span>
+                <span className="shop-card-price">
+                    {item.price} <CurrencyIcon />
+                </span>
             </div>
 
             {item.imageUrl && (
