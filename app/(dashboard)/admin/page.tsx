@@ -68,6 +68,10 @@ export default async function AdminPage()
                         placeholder="Fulfillment (e.g. Ships in 2 weeks, Instant digital code)"
                         className="input-email"
                     />
+                    <label className="admin-checkbox-label">
+                        <input type="checkbox" name="disabled" className="admin-checkbox" />
+                        Disable this item (hidden from the shop until unchecked)
+                    </label>
                     <button type="submit" className="btn-primary self-start">
                          Item.add
                     </button>

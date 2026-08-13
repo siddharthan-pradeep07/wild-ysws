@@ -12,11 +12,13 @@ export default async function ShopPage()
         getFeaturedItemIds(user?.email),
     ]);
 
+    const visibleItems = items.filter((item) => !item.disabled);
+
     const featuredItems = featuredItemIds
-        .map((id) => items.find((item) => item.id === id))
+        .map((id) => visibleItems.find((item) => item.id === id))
         .filter((item): item is ShopItem => Boolean(item));
 
-    const unfeaturedItems = items.filter((item) => !featuredItemIds.includes(item.id));
+    const unfeaturedItems = visibleItems.filter((item) => !featuredItemIds.includes(item.id));
 
     const canFeatureMore = featuredItemIds.length < 3;
 
@@ -57,7 +59,7 @@ export default async function ShopPage()
                 </div>
             )}
 
-            {items.length === 0 ? (
+            {visibleItems.length === 0 ? (
                 <p className="text-lg text-strong">
                     No items in the shop yet — check back soon!
                 </p>

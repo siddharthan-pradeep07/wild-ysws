@@ -17,6 +17,7 @@ export type ShopItem =
     imageUrl: string;
     fulfillment: string;
     order: number;
+    disabled: boolean;
     createdAt: string;
 };
 
@@ -32,6 +33,7 @@ type ShopItemFields =
     "Image URL"?: string;
     fulfill?: string;
     Order?: number;
+    Disabled?: boolean;
 };
 
 function recordToItem(record: AirtableRecord<ShopItemFields>): ShopItem
@@ -44,6 +46,7 @@ function recordToItem(record: AirtableRecord<ShopItemFields>): ShopItem
         imageUrl: record.fields["Image URL"] ?? "",
         fulfillment: record.fields.fulfill ?? "",
         order: record.fields.Order ?? 0,
+        disabled: record.fields.Disabled === true,
         createdAt: record.createdTime,
     };
 }
@@ -55,6 +58,7 @@ export type ShopItemInput =
     price: number;
     imageUrl: string;
     fulfillment: string;
+    disabled: boolean;
 };
 
 function inputToFields(data: ShopItemInput): ShopItemFields
@@ -65,6 +69,7 @@ function inputToFields(data: ShopItemInput): ShopItemFields
         Price: data.price,
         "Image URL": data.imageUrl,
         fulfill: data.fulfillment,
+        Disabled: data.disabled,
     };
 }
 

@@ -77,6 +77,15 @@ export default function ShopItemRow({
                     placeholder="Fulfillment (e.g. Ships in 2 weeks, Instant digital code)"
                     className="input-email"
                 />
+                <label className="admin-checkbox-label">
+                    <input
+                        type="checkbox"
+                        name="disabled"
+                        defaultChecked={item.disabled}
+                        className="admin-checkbox"
+                    />
+                    Disable this item (hidden from the shop until unchecked)
+                </label>
                 <div className="shop-item-actions">
                     <button type="submit" className="btn-primary">
                         Save
@@ -95,7 +104,7 @@ export default function ShopItemRow({
 
     return (
         <div
-            className={`shop-item-card ${isDragging ? "shop-item-card-dragging" : ""}`}
+            className={`shop-item-card ${isDragging ? "shop-item-card-dragging" : ""} ${item.disabled ? "shop-item-card-disabled" : ""}`}
             onDragOver={onDragOver}
             onDrop={onDrop}
         >
@@ -117,7 +126,10 @@ export default function ShopItemRow({
             ) : (
                 <div className="shop-item-thumb shop-item-thumb-empty" aria-hidden="true" />
             )}
-            <span className="shop-item-name">{item.name}</span>
+            <span className="shop-item-name">
+                {item.name}
+                {item.disabled && <span className="shop-item-disabled-badge">disabled</span>}
+            </span>
             <div className="shop-item-actions">
                 <button
                     type="button"

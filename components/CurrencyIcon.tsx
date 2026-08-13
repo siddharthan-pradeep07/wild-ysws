@@ -6,8 +6,8 @@ export default function CurrencyIcon({ className }: { className?: string })
         <Image
             src="/other-images/bark-wbg.png"
             alt="barks"
-            width={18}
-            height={18}
+            width={35}
+            height={35}
             className={className ? `currency-icon ${className}` : "currency-icon"}
         />
     );
