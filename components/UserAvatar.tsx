@@ -23,8 +23,10 @@ export default async function UserAvatar()
             <img
                 src={avatarUrl}
                 alt={user.name ? `${user.name}'s Slack avatar` : "Your Slack avatar"}
-                className="user-avatar-image"
+                className="user-avatar-image mb-3"
             />
+            <p>{user.name}</p>
         </div>
+        
     );
 }

@@ -372,15 +372,22 @@ body {
 .user-avatar
 {
   position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
+  bottom: 2rem;
+  left: 1rem;
   z-index: 50;
+  font-size: 1rem;
+  /* border-bottom: 3px  #263a29; */
+  text-decoration: underline;
+  text-decoration-style: linear;
+  text-decoration-color: #1d331e;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
 }
 
 .user-avatar-image
 {
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
   border-radius: 10%;
   border: 3px solid #ffffff;
   object-fit: cover;

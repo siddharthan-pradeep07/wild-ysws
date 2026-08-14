@@ -43,7 +43,7 @@ export default function ShopCard({
 
             <div className="shop-card-actions">
                 <a href={`/shop/${item.id}`} className="btn-secondary">
-                    Buy for {item.price} barks
+                    Buy for {item.price} {item.price === 1 ? "bark" : "barks"}
                 </a>
                 <FeatureStarButton
                     itemId={item.id}
