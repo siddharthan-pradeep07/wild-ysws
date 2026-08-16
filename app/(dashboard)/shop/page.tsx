@@ -70,7 +70,7 @@ export default async function ShopPage()
 
             {visibleItems.length === 0 ? (
                 <p className="text-lg text-strong">
-                    No items in the shop yet — check back soon!
+                    Try reloading... (ctrl + shift + r)
                 </p>
             ) : unfeaturedItems.length > 0 ? (
                 <div className="shop-grid">

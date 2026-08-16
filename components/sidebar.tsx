@@ -11,7 +11,13 @@ const navItems =
     {label: "profile", href: "/profile"},
 ];
 
-export default  function Sidebar({ isAdmin = false }: { isAdmin?: boolean })
+export default  function Sidebar({
+    isAdmin = false,
+    children,
+}: {
+    isAdmin?: boolean;
+    children?: React.ReactNode;
+})
 {
     const pathname = usePathname();
     const items = isAdmin
@@ -31,6 +37,7 @@ export default  function Sidebar({ isAdmin = false }: { isAdmin?: boolean })
                     </Link>
                 ))}
             </nav>
+            {children}
         </aside>
     );
 }

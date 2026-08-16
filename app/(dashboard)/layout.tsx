@@ -11,12 +11,13 @@ export default async function DashboardLayout({ children } : { children: React.R
 
     return (
         <div className="dashboard-shell">
-            {/* Avatar comes from a live Slack API call — Suspense keeps it
-                from blocking the sidebar/content on every navigation. */}
-            <Suspense fallback={null}>
-                <UserAvatar />
-            </Suspense>
-            <Sidebar isAdmin={isAdmin} />
+            <Sidebar isAdmin={isAdmin}>
+                {/* Avatar comes from a live Slack API call — Suspense keeps it
+                    from blocking the sidebar/content on every navigation. */}
+                <Suspense fallback={null}>
+                    <UserAvatar />
+                </Suspense>
+            </Sidebar>
             <div className="dashboard-content">
                 {children}
             </div>

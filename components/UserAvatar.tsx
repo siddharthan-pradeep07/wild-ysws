@@ -30,9 +30,12 @@ export default async function UserAvatar()
                 alt={user.name ? `${user.name}'s Slack avatar` : "Your Slack avatar"}
                 className="user-avatar-image"
             />
-            <span className="user-avatar-barks">
-                {barks} <CurrencyIcon />
-            </span>
+            <div className="user-avatar-info">
+                <span className="user-avatar-name">{user.name}</span>
+                <span className="user-avatar-barks">
+                    {barks} <CurrencyIcon />
+                </span>
+            </div>
         </div>
     );
 }

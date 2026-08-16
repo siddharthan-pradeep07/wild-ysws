@@ -106,7 +106,7 @@ export default function UserRow({ appUser }: { appUser: AppUser })
                             className="btn-primary self-start"
                             disabled={isPending}
                         >
-                            {isPending ? "Saving..." : "Save note"}
+                            {isPending ? "Saving note..." : "Save note"}
                         </button>
                     </form>
                 </div>
