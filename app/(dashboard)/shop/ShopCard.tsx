@@ -6,12 +6,16 @@ export default function ShopCard({
     item,
     isFeatured,
     canFeatureMore,
+    barks,
 }: {
     item: ShopItem;
     isFeatured: boolean;
     canFeatureMore: boolean;
+    barks: number;
 })
 {
+    const canAfford = barks >= item.price;
+
     return (
         <div className="shop-card">
             <div className="shop-card-header">
@@ -42,9 +46,19 @@ export default function ShopCard({
             )}
 
             <div className="shop-card-actions">
-                <a href={`/shop/${item.id}`} className="btn-secondary">
-                    Buy for {item.price} {item.price === 1 ? "bark" : "barks"}
-                </a>
+                {canAfford ? (
+                    <a href={`/shop/${item.id}`} className="btn-secondary">
+                        Buy for {item.price} {item.price === 1 ? "bark" : "barks"}
+                    </a>
+                ) : (
+                    <span
+                        className="btn-secondary btn-secondary-disabled"
+                        aria-disabled="true"
+                        title="Not enough barks"
+                    >
+                        Buy for {item.price} {item.price === 1 ? "bark" : "barks"}
+                    </span>
+                )}
                 <FeatureStarButton
                     itemId={item.id}
                     isFeatured={isFeatured}

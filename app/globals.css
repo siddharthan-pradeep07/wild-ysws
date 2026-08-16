@@ -18,7 +18,7 @@ body {
   font-family: var(--font-sora), Arial, Helvetica, sans-serif;
 }
 
-.btn-primary
+.btn-primary /* default button */
 {
   padding: 0.75rem 1.5rem;
   padding-left: 1.5rem;
@@ -36,7 +36,7 @@ body {
   background-color: #4a6b4fbe;
 }
 
-.btn-danger
+.btn-danger /* red button */
 {
   padding: 0.75rem 1.5rem;
   padding-left: 1.5rem;
@@ -54,7 +54,7 @@ body {
   background-color: #a83232be;
 }
 
-.btn-secondary
+.btn-secondary /* normal button with proper border */
 {
   padding: 0.75rem 1.5rem;
   padding-left: 1.5rem;
@@ -77,7 +77,7 @@ body {
   background-color: #4a6b4fc9;
 }
 
-.btn-secondary-danger
+.btn-secondary-danger /* red button (proper) */
 {
   padding: 0.75rem 1.5rem;
   padding-left: 1.5rem;
@@ -98,6 +98,23 @@ body {
 .btn-secondary-danger:hover
 {
   background-color: #a83232be;
+}
+
+.btn-secondary-disabled /* grey out button */
+{
+  background-color: #6c726db7;
+  /* border-color: #8a8a8a; */
+  border: 4px solid #788079;
+  color: #e0e0e0;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.btn-secondary-disabled:hover
+{
+  background-color: #6c726db7;
+  /* border-color: #8a8a8a; */
+  border: 4px solid #788079;;
 }
 
 .input-email
@@ -378,7 +395,8 @@ body {
   margin: auto -2rem -2rem -2rem;
   padding: 1rem 1rem;
   background-color: #132a366c;
-  border-top: 3px solid #0d2b28;
+  border-top: 5px solid #0d2b28;
+  /* border-top-right-radius: 1rem; */
 }
 
 .user-avatar-image
@@ -456,7 +474,10 @@ body {
   color: #ffffff;
   font-weight: 900;
   font-size: 1.5rem;
-  border-radius: 1rem;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 3rem;
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 3rem;
   text-decoration: none;
 }
 

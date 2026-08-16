@@ -62,6 +62,7 @@ export default async function ShopPage()
                                 item={item}
                                 isFeatured
                                 canFeatureMore={canFeatureMore}
+                                barks={barks}
                             />
                         ))}
                     </div>
@@ -80,6 +81,7 @@ export default async function ShopPage()
                             item={item}
                             isFeatured={false}
                             canFeatureMore={canFeatureMore}
+                            barks={barks}
                         />
                     ))}
                 </div>
