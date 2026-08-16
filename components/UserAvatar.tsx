@@ -1,5 +1,7 @@
 import { getSessionUser } from "@/lib/session";
 import { getSlackAvatarUrl } from "@/lib/slack";
+import { getBarks } from "@/lib/users";
+import CurrencyIcon from "@/components/CurrencyIcon";
 
 export default async function UserAvatar()
 {
@@ -10,7 +12,10 @@ export default async function UserAvatar()
         return null;
     }
 
-    const avatarUrl = await getSlackAvatarUrl(user.slack_id);
+    const [avatarUrl, barks] = await Promise.all([
+        getSlackAvatarUrl(user.slack_id),
+        getBarks(user.email),
+    ]);
 
     if (!avatarUrl)
     {
@@ -23,10 +28,11 @@ export default async function UserAvatar()
             <img
                 src={avatarUrl}
                 alt={user.name ? `${user.name}'s Slack avatar` : "Your Slack avatar"}
-                className="user-avatar-image mb-3"
+                className="user-avatar-image"
             />
-            <p>{user.name}</p>
+            <span className="user-avatar-barks">
+                {barks} <CurrencyIcon />
+            </span>
         </div>
-        
     );
 }

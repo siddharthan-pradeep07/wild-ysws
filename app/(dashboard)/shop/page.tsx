@@ -1,15 +1,17 @@
 import { listShopItems, type ShopItem } from "@/lib/shop";
 import { getSessionUser } from "@/lib/session";
-import { getFeaturedItemIds } from "@/lib/users";
+import { getBarks, getFeaturedItemIds } from "@/lib/users";
 import ShopCard from "./ShopCard";
+import CurrencyIcon from "@/components/CurrencyIcon";
 
 export default async function ShopPage()
 {
     const user = await getSessionUser();
 
-    const [items, featuredItemIds] = await Promise.all([
+    const [items, featuredItemIds, barks] = await Promise.all([
         listShopItems(),
         getFeaturedItemIds(user?.email),
+        getBarks(user?.email),
     ]);
 
     const visibleItems = items.filter((item) => !item.disabled);
@@ -28,8 +30,15 @@ export default async function ShopPage()
                 <h1 className="text-2xl md:text-4xl font-bold mb-6 text-strong padding-bottom-0.5">
                     Shop
                 </h1>
+
+                {user?.email && (
+                    <div className="barks-balance mb-4">
+                        You have {barks} <CurrencyIcon />
+                    </div>
+                )}
+
                 <p className="featured-box-hint">
-                    The list of the items or prices may change. 
+                    The list of the items or prices may change.
                 </p>
                 <p className="featured-box-hint mb-6">
                     1 approved hour = 1 bark

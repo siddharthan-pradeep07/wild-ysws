@@ -29,6 +29,7 @@ export type AppUser =
     lastLogin: string;
     loginCount: number;
     internalNote: string;
+    barks: number;
 };
 
 type UserFields =
@@ -54,6 +55,7 @@ type UserFields =
     // Only admins can see this field, it's never shown to the user it's about.
     "Internal Note"?: string;
     "Featured Items"?: string;
+    barks?: number;
 };
 
 function normalizeRole(role: string | undefined): UserRole
@@ -81,6 +83,7 @@ function recordToUser(record: AirtableRecord<UserFields>): AppUser
         verificationStatus: record.fields["Verification Status"] ?? "",
         lastLogin: record.fields["Last Login"] ?? "",
         loginCount: record.fields["Login Count"] ?? 0,
+        barks: record.fields.barks ?? 0,
         internalNote: record.fields["Internal Note"] ?? "",
     };
 }
@@ -148,6 +151,25 @@ export async function getUserRole(email: string | undefined | null): Promise<Use
     {
         console.error("Failed to look up user role:", err);
         return "user";
+    }
+}
+
+export async function getBarks(email: string | undefined | null): Promise<number>
+{
+    if (!email)
+    {
+        return 0;
+    }
+
+    try
+    {
+        const record = await findUserRecordByEmail(email);
+        return record?.fields.barks ?? 0;
+    }
+    catch (err)
+    {
+        console.error("Failed to look up bark balance:", err);
+        return 0;
     }
 }
 

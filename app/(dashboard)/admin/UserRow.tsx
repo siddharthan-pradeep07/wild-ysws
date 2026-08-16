@@ -83,6 +83,9 @@ export default function UserRow({ appUser }: { appUser: AppUser })
 
                         <span className="users-detail-label">Login count</span>
                         <span>{appUser.loginCount}</span>
+
+                        <span className="users-detail-label">Barks balance</span>
+                        <span>{appUser.barks}</span>
                     </div>
 
                     <form action={handleSaveNote} className="users-detail-note-form">
