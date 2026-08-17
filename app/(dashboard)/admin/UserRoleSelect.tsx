@@ -29,6 +29,7 @@ export default function UserRoleSelect({ id, role }: { id: string; role: UserRol
         >
             <option value="user">user</option>
             <option value="admin">admin</option>
+            <option value="reviewer">reviewer</option>
             <option value="banned">banned</option>
         </select>
     );

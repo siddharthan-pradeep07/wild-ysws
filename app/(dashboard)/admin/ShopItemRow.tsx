@@ -87,12 +87,12 @@ export default function ShopItemRow({
                     Disable this item (hidden from the shop until unchecked)
                 </label>
                 <div className="shop-item-actions">
-                    <button type="submit" className="btn-primary">
+                    <button type="submit" className="btn-secondary">
                         Save
                     </button>
                     <button
                         type="button"
-                        className="btn-primary"
+                        className="btn-secondary"
                         onClick={() => setIsEditing(false)}
                     >
                         Cancel
@@ -133,14 +133,14 @@ export default function ShopItemRow({
             <div className="shop-item-actions">
                 <button
                     type="button"
-                    className="btn-primary"
+                    className="btn-secondary"
                     onClick={() => setIsEditing(true)}
                 >
                     Edit
                 </button>
                 <form action={deleteShopItemAction}>
                     <input type="hidden" name="id" value={item.id} />
-                    <button type="submit" className="btn-primary">
+                    <button type="submit" className="btn-secondary">
                         Delete
                     </button>
                 </form>

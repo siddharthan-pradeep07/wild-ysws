@@ -9,7 +9,7 @@ type Tab =
     content: ReactNode;
 };
 
-export default function AdminTabs({ tabs }: { tabs: Tab[] })
+export default function Tabs({ tabs }: { tabs: Tab[] })
 {
     const [activeKey, setActiveKey] = useState(tabs[0]?.key);
     const activeTab = tabs.find((tab) => tab.key === activeKey) ?? tabs[0];

@@ -13,16 +13,25 @@ const navItems =
 
 export default  function Sidebar({
     isAdmin = false,
+    isReviewer = false,
     children,
 }: {
     isAdmin?: boolean;
+    isReviewer?: boolean;
     children?: React.ReactNode;
 })
 {
     const pathname = usePathname();
-    const items = isAdmin
-        ? [...navItems, {label: "admin", href: "/admin"}]
-        : navItems;
+    let items = navItems;
+
+    if (isReviewer)
+    {
+        items = [...items, {label: "review", href: "/reviewer"}];
+    }
+    if (isAdmin)
+    {
+        items = [...items, {label: "admin", href: "/admin"}];
+    }
 
     return (
         <aside className="sidebar">

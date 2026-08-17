@@ -5,7 +5,7 @@ import { listShopItems } from "@/lib/shop";
 import { listProjects } from "@/lib/projects";
 import { listUsers } from "@/lib/users";
 import { createShopItemAction } from "./actions";
-import AdminTabs from "./AdminTabs";
+import Tabs from "@/components/Tabs";
 import ShopItemList from "./ShopItemList";
 import UserRow from "./UserRow";
 import ProjectRow from "./ProjectRow";
@@ -163,7 +163,7 @@ export default async function AdminPage()
                 Admin panel
             </h1>
 
-            <AdminTabs
+            <Tabs
                 tabs={[
                     { key: "shop", label: "Shop", content: shopTabContent },
                     {
@@ -172,13 +172,13 @@ export default async function AdminPage()
                         content: projectsTabContent,
                     },
                     {
-                        key: "placeholder-1",
-                        label: "review",
+                        key: "review",
+                        label: "Review",
                         content: placeholderContent,
                     },
                     {
-                        key: "placeholder-2",
-                        label: "leaderboard",
+                        key: "leaderboard",
+                        label: "Leaderboard",
                         content: placeholderContent,
                     },
                     {

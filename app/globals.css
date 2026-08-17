@@ -386,6 +386,39 @@ body {
   background-color: #a3b18a;
 }
 
+.reviewer-shell
+{
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: 2rem;
+  background-color: #36454F;
+  text-align: left;
+}
+
+.reviewer-topbar
+{
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.reviewer-logged-in-as
+{
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.text-light
+{
+  color: #ffffff;
+}
+
 .user-avatar
 {
   display: flex;

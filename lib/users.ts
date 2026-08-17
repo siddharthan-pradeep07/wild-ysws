@@ -11,7 +11,7 @@ import {
 // select field with the options user, admin and banned.
 const TABLE = process.env.AIRTABLE_USERS_TABLE_NAME ?? "Users";
 
-export type UserRole = "user" | "admin" | "banned";
+export type UserRole = "user" | "admin" | "banned" | "reviewer";
 
 export type AppUser =
 {
@@ -60,7 +60,7 @@ type UserFields =
 
 function normalizeRole(role: string | undefined): UserRole
 {
-    if (role === "admin" || role === "banned")
+    if (role === "admin" || role === "banned" || role === "reviewer")
     {
         return role;
     }
@@ -152,6 +152,12 @@ export async function getUserRole(email: string | undefined | null): Promise<Use
         console.error("Failed to look up user role:", err);
         return "user";
     }
+}
+
+export async function isReviewer(email: string | undefined | null): Promise<boolean>
+{
+    const role = await getUserRole(email);
+    return role === "reviewer";
 }
 
 export async function getBarks(email: string | undefined | null): Promise<number>
