@@ -179,6 +179,25 @@ export async function getBarks(email: string | undefined | null): Promise<number
     }
 }
 
+// Grants (positive delta) or revokes (negative delta) barks for a user, by
+// Airtable record id. Reads the current balance fresh right before writing,
+// rather than trusting a balance the admin panel already had on screen, so
+// two admins adjusting the same user around the same time don't clobber
+// each other. Never lets the balance go below zero.
+export async function adjustBarks(id: string, delta: number): Promise<number>
+{
+    const records = await listRecords<UserFields>(TABLE, {
+        filterByFormula: `RECORD_ID() = '${id}'`,
+        maxRecords: "1",
+    });
+
+    const current = records[0]?.fields.barks ?? 0;
+    const next = Math.max(0, current + delta);
+
+    await updateRecord<UserFields>(TABLE, id, { barks: next });
+    return next;
+}
+
 export async function updateUserRole(id: string, role: UserRole): Promise<void>
 {
     await updateRecord<UserFields>(TABLE, id, { Role: role });

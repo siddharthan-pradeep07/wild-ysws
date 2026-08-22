@@ -10,7 +10,7 @@ import {
     reorderShopItems,
     updateShopItem,
 } from "@/lib/shop";
-import { updateInternalNote, updateUserRole, type UserRole } from "@/lib/users";
+import { adjustBarks, updateInternalNote, updateUserRole, type UserRole } from "@/lib/users";
 
 // Every action here re-checks admin status on the server, since Server
 // Actions can be reached with a direct POST request and not just through
@@ -146,4 +146,27 @@ export async function updateInternalNoteAction(formData: FormData)
     await updateInternalNote(id, note);
 
     revalidatePath("/admin");
+}
+
+export async function adjustBarksAction(formData: FormData)
+{
+    await requireAdmin();
+
+    const id = parseId(formData);
+    const amount = Number(formData.get("amount"));
+    const direction = String(formData.get("direction") ?? "");
+
+    if (!Number.isFinite(amount) || amount <= 0)
+    {
+        throw new Error("Enter a positive amount");
+    }
+    if (direction !== "grant" && direction !== "revoke")
+    {
+        throw new Error("Invalid direction");
+    }
+
+    await adjustBarks(id, direction === "grant" ? amount : -amount);
+
+    revalidatePath("/admin");
+    revalidatePath("/shop");
 }

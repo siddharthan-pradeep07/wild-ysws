@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import type { AppUser } from "@/lib/users";
 import UserRoleSelect from "./UserRoleSelect";
-import { updateInternalNoteAction } from "./actions";
+import { adjustBarksAction, updateInternalNoteAction } from "./actions";
 
 function formatDateTime(value: string)
 {
@@ -25,12 +25,28 @@ export default function UserRow({ appUser }: { appUser: AppUser })
 {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isPending, startTransition] = useTransition();
+    const [barksAmount, setBarksAmount] = useState("");
+    const [barksPending, startBarksTransition] = useTransition();
 
     function handleSaveNote(formData: FormData)
     {
         startTransition(async () =>
         {
             await updateInternalNoteAction(formData);
+        });
+    }
+
+    function handleAdjustBarks(direction: "grant" | "revoke")
+    {
+        const formData = new FormData();
+        formData.set("id", appUser.id);
+        formData.set("amount", barksAmount);
+        formData.set("direction", direction);
+
+        startBarksTransition(async () =>
+        {
+            await adjustBarksAction(formData);
+            setBarksAmount("");
         });
     }
 
@@ -86,6 +102,34 @@ export default function UserRow({ appUser }: { appUser: AppUser })
 
                         <span className="users-detail-label">Barks balance</span>
                         <span>{appUser.barks}</span>
+                    </div>
+
+                    <div className="users-barks-adjust">
+                        <input
+                            type="number"
+                            min="1"
+                            step="1"
+                            value={barksAmount}
+                            onChange={(event) => setBarksAmount(event.target.value)}
+                            placeholder="Amount"
+                            className="input-email"
+                        />
+                        <button
+                            type="button"
+                            className="btn-secondary"
+                            disabled={barksPending || !barksAmount}
+                            onClick={() => handleAdjustBarks("grant")}
+                        >
+                            {barksPending ? "..." : "Grant"}
+                        </button>
+                        <button
+                            type="button"
+                            className="btn-secondary-danger"
+                            disabled={barksPending || !barksAmount}
+                            onClick={() => handleAdjustBarks("revoke")}
+                        >
+                            {barksPending ? "..." : "Revoke"}
+                        </button>
                     </div>
 
                     <form action={handleSaveNote} className="users-detail-note-form">

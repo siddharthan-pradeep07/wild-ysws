@@ -14,8 +14,7 @@ Hack Club identity, connect Hackatime (tracks a user's coding time), submit proj
 review submissions, and manage users; reviewers get a focused full-screen panel of
 their own.
 
-There's no traditional database — Airtable is the entire data layer, accessed through
-a small REST client (`lib/airtable.ts`). No SDK, no ORM, just `fetch`.
+This YSWS is currently a draft, and logins may be paused due to airtable (database limits)
 
 ## Features
 
@@ -145,7 +144,10 @@ Airtable field names are case-sensitive over the API.
 | `reviewer` | The full-screen `/reviewer` panel (Review + Leaderboard tabs) |
 | `banned` | Blocked from submitting or editing projects, with a message pointing them to an admin |
 
+-----
+
 Every check is re-verified server-side inside the Server Action itself — Server
 Actions are reachable via a direct POST regardless of what the UI renders, so
 authorization never relies on a button simply not being shown.
+
 -----
